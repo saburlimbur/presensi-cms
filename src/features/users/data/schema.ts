@@ -1,29 +1,39 @@
 import { z } from 'zod'
 
-const userStatusSchema = z.union([
-  z.literal('active'),
-  z.literal('inactive'),
-  z.literal('invited'),
-  z.literal('suspended'),
+export const positionEnum = z.enum([
+  'DIRECTOR',
+  'MANAGER',
+  'SUPERVISOR',
+  'TEAM_LEAD',
+  'SENIOR_STAFF',
+  'STAFF',
+  'JUNIOR_STAFF',
+  'HR_SPECIALIST',
+  'FINANCE_SPECIALIST',
+  'IT_SPECIALIST',
+  'MARKETING_SPECIALIST',
+  'INTERN',
+  'CONTRACT',
+  'OTHER',
 ])
-export type UserStatus = z.infer<typeof userStatusSchema>
+export type Position = z.infer<typeof positionEnum>
 
-const userRoleSchema = z.union([
-  z.literal('superadmin'),
-  z.literal('admin'),
-  z.literal('cashier'),
-  z.literal('manager'),
-])
+export const roleEnum = z.enum(['ADMIN', 'EMPLOYEE'])
+export type Role = z.infer<typeof roleEnum>
 
 const _userSchema = z.object({
   id: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
-  username: z.string(),
   email: z.string(),
-  phoneNumber: z.string(),
-  status: userStatusSchema,
-  role: userRoleSchema,
+  fullName: z.string(),
+  phone: z.string(),
+  employeeId: z.string(),
+  departmentId: z.string().nullable(),
+  departmentName: z.string().nullable(),
+  position: positionEnum,
+  role: roleEnum,
+  joinDate: z.coerce.date().nullable(),
+  isActive: z.boolean(),
+  isFaceRegistered: z.boolean(),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 })
