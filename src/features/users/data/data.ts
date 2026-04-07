@@ -26,7 +26,7 @@ export const roles = [
   {
     label: 'Admin',
     value: 'ADMIN',
-    icon: Shield,
+    // icon: Shield,
   },
   {
     label: 'Employee',
@@ -36,18 +36,74 @@ export const roles = [
 ] as const
 
 export const positions = [
-  { label: 'Director', value: 'DIRECTOR', icon: Star },
-  { label: 'Manager', value: 'MANAGER', icon: Briefcase },
-  { label: 'Supervisor', value: 'SUPERVISOR', icon: Users },
-  { label: 'Team Lead', value: 'TEAM_LEAD', icon: UserCheck },
-  { label: 'Senior Staff', value: 'SENIOR_STAFF', icon: User },
-  { label: 'Staff', value: 'STAFF', icon: User },
-  { label: 'Junior Staff', value: 'JUNIOR_STAFF', icon: UserMinus },
-  { label: 'HR Specialist', value: 'HR_SPECIALIST', icon: GraduationCap },
-  { label: 'Finance Specialist', value: 'FINANCE_SPECIALIST', icon: DollarSign },
-  { label: 'IT Specialist', value: 'IT_SPECIALIST', icon: Monitor },
-  { label: 'Marketing Specialist', value: 'MARKETING_SPECIALIST', icon: Megaphone },
-  { label: 'Intern', value: 'INTERN', icon: GraduationCap },
-  { label: 'Contract', value: 'CONTRACT', icon: FileText },
-  { label: 'Other', value: 'OTHER', icon: Wrench },
+  {
+    label: 'Director',
+    value: 'DIRECTOR',
+    icon: Star,
+  },
+  {
+    label: 'Manager',
+    value: 'MANAGER',
+    icon: Briefcase,
+  },
+  {
+    label: 'Supervisor',
+    value: 'SUPERVISOR',
+    icon: Users,
+  },
+  {
+    label: 'Team Lead',
+    value: 'TEAM_LEAD',
+    icon: UserCheck,
+  },
+  {
+    label: 'Senior Staff',
+    value: 'SENIOR_STAFF',
+    icon: User,
+  },
+  {
+    label: 'Staff',
+    value: 'STAFF',
+    icon: User,
+  },
+  {
+    label: 'Junior Staff',
+    value: 'JUNIOR_STAFF',
+    icon: UserMinus,
+  },
+  {
+    label: 'HR Specialist',
+    value: 'HR_SPECIALIST',
+    icon: GraduationCap,
+  },
+  {
+    label: 'Finance Specialist',
+    value: 'FINANCE_SPECIALIST',
+    icon: DollarSign,
+  },
+  {
+    label: 'IT Specialist',
+    value: 'IT_SPECIALIST',
+    icon: Monitor,
+  },
+  {
+    label: 'Marketing Specialist',
+    value: 'MARKETING_SPECIALIST',
+    icon: Megaphone,
+  },
+  {
+    label: 'Intern',
+    value: 'INTERN',
+    icon: GraduationCap,
+  },
+  {
+    label: 'Contract',
+    value: 'CONTRACT',
+    icon: FileText,
+  },
+  {
+    label: 'Other',
+    value: 'OTHER',
+    icon: Wrench,
+  },
 ] as const
