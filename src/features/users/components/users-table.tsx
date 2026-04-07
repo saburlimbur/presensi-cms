@@ -50,10 +50,26 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
     pagination: { defaultPage: 1, defaultPageSize: 10 },
     globalFilter: { enabled: false },
     columnFilters: [
-      { columnId: 'fullName', searchKey: 'fullName', type: 'string' },
-      { columnId: 'isActive', searchKey: 'status', type: 'array' },
-      { columnId: 'role', searchKey: 'role', type: 'array' },
-      { columnId: 'position', searchKey: 'position', type: 'array' },
+      {
+        columnId: 'fullName',
+        searchKey: 'fullName',
+        type: 'string',
+      },
+      {
+        columnId: 'isActive',
+        searchKey: 'status',
+        type: 'array',
+      },
+      {
+        columnId: 'role',
+        searchKey: 'role',
+        type: 'array',
+      },
+      {
+        columnId: 'position',
+        searchKey: 'position',
+        type: 'array',
+      },
     ],
   })
 
@@ -102,8 +118,14 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
             columnId: 'isActive',
             title: 'Status',
             options: [
-              { label: 'Active', value: 'active' },
-              { label: 'Inactive', value: 'inactive' },
+              {
+                label: 'Active',
+                value: 'active',
+              },
+              {
+                label: 'Inactive',
+                value: 'inactive',
+              },
             ],
           },
           {
@@ -114,7 +136,10 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
           {
             columnId: 'position',
             title: 'Position',
-            options: positions.map((p) => ({ label: p.label, value: p.value })),
+            options: positions.map((p) => ({
+              label: p.label,
+              value: p.value,
+            })),
           },
         ]}
       />
@@ -156,7 +181,7 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
                     <TableCell
                       key={cell.id}
                       className={cn(
-                        'bg-background group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
+                        'bg-background text-xs group-hover/row:bg-muted group-data-[state=selected]/row:bg-muted',
                         cell.column.columnDef.meta?.className,
                         cell.column.columnDef.meta?.tdClassName
                       )}

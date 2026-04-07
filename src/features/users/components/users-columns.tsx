@@ -1,5 +1,5 @@
-import { type ColumnDef } from '@tanstack/react-table'
 import { format } from 'date-fns'
+import { type ColumnDef } from '@tanstack/react-table'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -43,7 +43,7 @@ export const usersColumns: ColumnDef<User>[] = [
       <DataTableColumnHeader column={column} title='Employee ID' />
     ),
     cell: ({ row }) => (
-      <span className='font-medium'>{row.getValue('employeeId')}</span>
+      <span className='text-xs font-medium'>{row.getValue('employeeId')}</span>
     ),
     meta: {
       className: cn(
@@ -53,53 +53,94 @@ export const usersColumns: ColumnDef<User>[] = [
     },
     enableHiding: false,
   },
+  // {
+  //   accessorKey: 'fullName',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Full Name' />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <LongText className='max-w-36 text-xs'>
+  //       {row.getValue('fullName')}
+  //     </LongText>
+  //   ),
+  //   meta: { className: 'w-36' },
+  // },
+  // {
+  //   accessorKey: 'email',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Email' />
+  //   ),
+  //   cell: ({ row }) => (
+  //     <div className='w-fit ps-2 text-xs text-nowrap'>
+  //       {row.getValue('email')}
+  //     </div>
+  //   ),
+  // },
+  //
   {
     accessorKey: 'fullName',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Full Name' />
+      <DataTableColumnHeader column={column} title='Name' />
     ),
-    cell: ({ row }) => (
-      <LongText className='max-w-36'>{row.getValue('fullName')}</LongText>
-    ),
-    meta: { className: 'w-36' },
+    cell: ({ row }) => {
+      const fullName = row.getValue('fullName') as string
+      const email = row.original.email
+      const initials = fullName
+        ?.split(' ')
+        .map((name) => name[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+
+      return (
+        <div className='flex items-center gap-3'>
+          <div className='flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-semibold'>
+            {initials}
+          </div>
+
+          <div className='flex flex-col gap-1'>
+            <span className='text-xs leading-none font-medium'>{fullName}</span>
+            <span className='text-[11px] text-muted-foreground'>{email}</span>
+          </div>
+        </div>
+      )
+    },
   },
+  // {
+  //   accessorKey: 'phone',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Phone' />
+  //   ),
+  //   cell: ({ row }) => <div className='text-xs'>{row.getValue('phone')}</div>,
+  //   enableSorting: false,
+  // },
   {
-    accessorKey: 'email',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Email' />
-    ),
-    cell: ({ row }) => (
-      <div className='w-fit ps-2 text-nowrap'>{row.getValue('email')}</div>
-    ),
-  },
-  {
-    accessorKey: 'phone',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Phone' />
-    ),
-    cell: ({ row }) => <div>{row.getValue('phone')}</div>,
-    enableSorting: false,
-  },
-  {
-    accessorKey: 'departmentName',
+    accessorKey: 'department',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Department' />
     ),
-    cell: ({ row }) => (
-      <div>{row.getValue('departmentName') || '-'}</div>
-    ),
+    cell: ({ row }) => {
+      const dept = row.original.department
+      return <div className='text-xs'>{dept?.code ?? '-'}</div>
+    },
   },
   {
     accessorKey: 'position',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Position' />
+      <DataTableColumnHeader column={column} title='Job Title' />
     ),
     cell: ({ row }) => {
-      const pos = positions.find(({ value }) => value === row.getValue('position'))
+      const pos = positions.find(
+        ({ value }) => value === row.getValue('position')
+      )
       return (
         <div className='flex items-center gap-x-2'>
-          {pos?.icon && <pos.icon size={16} className='text-muted-foreground' />}
-          <span className='text-sm'>{pos?.label ?? row.getValue('position')}</span>
+          {pos?.icon && (
+            <pos.icon size={16} className='text-muted-foreground' />
+          )}
+          <span className='text-xs'>
+            {pos?.label ?? row.getValue('position')}
+          </span>
         </div>
       )
     },
@@ -109,7 +150,7 @@ export const usersColumns: ColumnDef<User>[] = [
   {
     accessorKey: 'role',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Role' />
+      <DataTableColumnHeader column={column} title='Employee Type' />
     ),
     cell: ({ row }) => {
       const userRole = roles.find(({ value }) => value === row.getValue('role'))
@@ -118,7 +159,9 @@ export const usersColumns: ColumnDef<User>[] = [
           {userRole?.icon && (
             <userRole.icon size={16} className='text-muted-foreground' />
           )}
-          <span className='text-sm'>{userRole?.label ?? row.getValue('role')}</span>
+          <span className='text-xs'>
+            {userRole?.label ?? row.getValue('role')}
+          </span>
         </div>
       )
     },
@@ -136,7 +179,10 @@ export const usersColumns: ColumnDef<User>[] = [
       const status = isActive ? 'active' : 'inactive'
       const badgeColor = statusTypes.get(status)
       return (
-        <Badge variant='outline' className={cn('capitalize', badgeColor)}>
+        <Badge
+          variant='outline'
+          className={cn('text-xs capitalize', badgeColor)}
+        >
           {status}
         </Badge>
       )
@@ -157,7 +203,10 @@ export const usersColumns: ColumnDef<User>[] = [
     cell: ({ row }) => {
       const registered = row.getValue('isFaceRegistered') as boolean
       return (
-        <Badge variant={registered ? 'default' : 'secondary'}>
+        <Badge
+          variant={registered ? 'default' : 'secondary'}
+          className='text-xs'
+        >
           {registered ? 'Registered' : 'Not Yet'}
         </Badge>
       )
@@ -171,7 +220,11 @@ export const usersColumns: ColumnDef<User>[] = [
     ),
     cell: ({ row }) => {
       const date = row.getValue('joinDate') as Date | null
-      return <div>{date ? format(date, 'dd MMM yyyy') : '-'}</div>
+      return (
+        <div className='text-xs'>
+          {date ? format(date, 'dd MMM yyyy') : '-'}
+        </div>
+      )
     },
   },
   {
