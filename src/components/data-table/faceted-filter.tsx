@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
+import { PlusCircledIcon } from '@radix-ui/react-icons'
 import { type Column } from '@tanstack/react-table'
-import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -102,16 +102,10 @@ export function DataTableFacetedFilter<TData, TValue>({
                       )
                     }}
                   >
-                    <div
-                      className={cn(
-                        'flex size-4 items-center justify-center rounded-sm border border-primary',
-                        isSelected
-                          ? 'bg-primary text-primary-foreground'
-                          : 'opacity-50 [&_svg]:invisible'
-                      )}
-                    >
-                      <CheckIcon className={cn('h-4 w-4 text-background')} />
-                    </div>
+                    <Checkbox
+                      checked={isSelected}
+                      className='pointer-events-none'
+                    />
                     {option.icon && (
                       <option.icon className='size-4 text-muted-foreground' />
                     )}
