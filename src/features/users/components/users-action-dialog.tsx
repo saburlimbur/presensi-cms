@@ -53,7 +53,10 @@ const formSchema = z
       if (isEdit && !password) return true
       return password.length >= 8
     },
-    { message: 'Password must be at least 8 characters long.', path: ['password'] }
+    {
+      message: 'Password must be at least 8 characters long.',
+      path: ['password'],
+    }
   )
   .refine(
     ({ isEdit, password, confirmPassword }) => {
@@ -122,10 +125,12 @@ export function UsersActionDialog({
       <DialogContent className='sm:max-w-lg'>
         <DialogHeader className='text-start'>
           <DialogTitle>
-            {isEdit ? 'Edit Employee' : 'Add New Employee'}
+            {isEdit ? 'Edit Employee' : 'Add New Employees'}
           </DialogTitle>
           <DialogDescription>
-            {isEdit ? 'Update the employee here. ' : 'Create new employee here. '}
+            {isEdit
+              ? 'Update the employee here. '
+              : 'Create new employee here. '}
             Click save when you&apos;re done.
           </DialogDescription>
         </DialogHeader>
@@ -251,51 +256,54 @@ export function UsersActionDialog({
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name='password'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>
-                      Password
-                    </FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        placeholder='e.g., S3cur3P@ssw0rd'
-                        className='col-span-4'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='confirmPassword'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>
-                      Confirm Password
-                    </FormLabel>
-                    <FormControl>
-                      <PasswordInput
-                        disabled={!isPasswordTouched}
-                        placeholder='e.g., S3cur3P@ssw0rd'
-                        className='col-span-4'
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
+              {!isEdit && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name='password'
+                    render={({ field }) => (
+                      <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
+                        <FormLabel className='col-span-2 text-end'>
+                          Password
+                        </FormLabel>
+                        <FormControl>
+                          <PasswordInput
+                            placeholder='e.g., S3cur3P@ssw0rd'
+                            className='col-span-4'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className='col-span-4 col-start-3' />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name='confirmPassword'
+                    render={({ field }) => (
+                      <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
+                        <FormLabel className='col-span-2 text-end'>
+                          Confirm Password
+                        </FormLabel>
+                        <FormControl>
+                          <PasswordInput
+                            placeholder='Confirm your password'
+                            className='col-span-4'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage className='col-span-4 col-start-3' />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
             </form>
           </Form>
         </div>
         <DialogFooter>
           <Button type='submit' form='user-form'>
-            Save changes
+            {isEdit ? 'Save changes' : 'Create Employees'}
           </Button>
         </DialogFooter>
       </DialogContent>
