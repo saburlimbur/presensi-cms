@@ -2,9 +2,11 @@ import { getRouteApi } from '@tanstack/react-router'
 import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
+import { NotificationDropdown } from '@/components/notification-dropdown'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { UsersDialogs } from '../users/components/users-dialogs'
 import { UsersProvider } from '../users/components/users-provider'
 import { UsersTable } from '../users/components/users-table'
 import useGetEmployee from './hooks/use-get-employee'
@@ -23,7 +25,8 @@ function Employees() {
         <Search />
         <div className='ms-auto flex items-center space-x-4'>
           <ThemeSwitch />
-          <ConfigDrawer />
+          {/*<ConfigDrawer />*/}
+          <NotificationDropdown />
           <ProfileDropdown />
         </div>
       </Header>
@@ -44,6 +47,7 @@ function Employees() {
             navigate={navigate}
           />
         </Main>
+        <UsersDialogs />
       </UsersProvider>
     </>
   )

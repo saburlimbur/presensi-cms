@@ -1,33 +1,242 @@
-import { Separator } from '@/components/ui/separator'
-import { ConfigDrawer } from '@/components/config-drawer'
+import { useMemo, useState } from 'react'
+import { Building2, Check, LayoutGrid, User, Users } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { Badge } from '@/components/ui/badge'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
+import { NotificationDropdown } from '@/components/notification-dropdown'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { DepartmentEmployeesTable } from './components/department-employees-table'
+import { type Department } from './components/departments-columns'
+import useGetAllDepartments from './hooks/useGetAllDepartments'
 
 function Departments() {
+  const { data: departments, isLoading } = useGetAllDepartments()
+  const [selectedId, setSelectedId] = useState<string>('all')
+
+  const totalEmployees =
+    departments?.reduce(
+      (sum: number, dept: Department) => sum + dept._count.employees,
+      0
+    ) ?? 0
+
+  const isAll = selectedId === 'all'
+
+  const selectedDepartment = useMemo(
+    () =>
+      isAll
+        ? null
+        : (departments?.find((d: Department) => d.id === selectedId) ?? null),
+    [departments, selectedId, isAll]
+  )
+
   return (
     <>
-      <Header>
+      <Header fixed>
         <Search />
         <div className='ms-auto flex items-center space-x-4'>
           <ThemeSwitch />
-          <ConfigDrawer />
+          <NotificationDropdown />
           <ProfileDropdown />
         </div>
       </Header>
 
-      <Main fixed>
-        <div className='space-y-0.5'>
-          <h1 className='text-2xl font-bold tracking-tight md:text-3xl'>
-            Departments
-          </h1>
+      <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
+        <div>
+          <h2 className='text-2xl font-bold tracking-tight'>Departments</h2>
           <p className='text-muted-foreground'>
-            Manage your account settings and set e-mail preferences.
+            Manage departments in your organization.
           </p>
         </div>
-        <Separator className='my-4 lg:my-6' />
+
+        {/* Summary Cards (Total Stats) */}
+        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3'>
+          <Card>
+            <CardHeader className='flex flex-row items-center justify-between pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                Total Departments
+              </CardTitle>
+              <Building2 className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>
+                {isLoading ? (
+                  <Skeleton className='h-8 w-12' />
+                ) : (
+                  (departments?.length ?? 0)
+                )}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className='flex flex-row items-center justify-between pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                Total Employees
+              </CardTitle>
+              <Users className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>
+                {isLoading ? <Skeleton className='h-8 w-12' /> : totalEmployees}
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader className='flex flex-row items-center justify-between pb-2'>
+              <CardTitle className='text-sm font-medium'>
+                With Head Assigned
+              </CardTitle>
+              <User className='h-4 w-4 text-muted-foreground' />
+            </CardHeader>
+            <CardContent>
+              <div className='text-2xl font-bold'>
+                {isLoading ? (
+                  <Skeleton className='h-8 w-12' />
+                ) : (
+                  (departments?.filter((d: Department) => d.head !== null)
+                    .length ?? 0)
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* selectable department cards */}
+        <div>
+          <h3 className='mb-3 text-sm font-medium text-muted-foreground'>
+            Select a department to view employees
+          </h3>
+          {isLoading ? (
+            <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className='h-25 w-full rounded-xl' />
+              ))}
+            </div>
+          ) : (
+            <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-4'>
+              {/* all departments card */}
+              <Card
+                className={cn(
+                  'cursor-pointer gap-3 py-3 transition-all hover:shadow-sm',
+                  isAll && 'bg-primary/5'
+                )}
+                onClick={() => setSelectedId('all')}
+              >
+                <CardHeader className='pb-0'>
+                  <div className='flex items-center gap-3'>
+                    <div
+                      className={cn(
+                        'flex h-9 w-9 items-center justify-center rounded-lg transition-colors',
+                        isAll ? 'bg-primary text-primary-foreground' : ''
+                      )}
+                    >
+                      <LayoutGrid className='h-4 w-4' />
+                    </div>
+                    <div className='flex w-full items-center justify-between'>
+                      <CardTitle className='text-sm'>All Departments</CardTitle>
+                      <Badge
+                        variant='secondary'
+                        className='mt-1 font-mono text-[10px]'
+                      >
+                        ALL
+                      </Badge>
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent className='mt-3 pb-0'>
+                  <div className='flex items-center justify-between text-sm text-muted-foreground'>
+                    <div className='flex items-center gap-1.5'>
+                      <Building2 className='h-3.5 w-3.5' />
+                      <span className='text-xs'>
+                        {departments?.length ?? 0} departments
+                      </span>
+                    </div>
+                    <div className='flex items-center gap-1.5'>
+                      <Users className='h-3.5 w-3.5' />
+                      <span className='text-xs'>{totalEmployees}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Individual Department Cards */}
+              {departments?.map((dept: Department) => {
+                const isSelected = selectedId === dept.id
+                return (
+                  <Card
+                    key={dept.id}
+                    className={cn(
+                      'cursor-pointer gap-3 py-3 transition-all hover:shadow-sm',
+                      isSelected && 'bg-primary/5'
+                    )}
+                    onClick={() => setSelectedId(dept.id)}
+                  >
+                    <CardHeader className='pb-0'>
+                      <div className='flex items-center gap-3'>
+                        <div
+                          className={cn(
+                            'flex h-9 w-9 items-center justify-center rounded-lg transition-colors',
+                            isSelected
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-primary/10 text-primary'
+                          )}
+                        >
+                          {/* Icon tetap Building2, gausah ganti Check */}
+                          <Building2 className='h-4 w-4' />
+                        </div>
+                        <div className='flex w-full items-center justify-between'>
+                          <CardTitle className='text-sm'>{dept.name}</CardTitle>
+                          <Badge
+                            variant='secondary'
+                            className='mt-1 font-mono text-[10px]'
+                          >
+                            {dept.code}
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className='mt-3 pb-0'>
+                      <div className='flex items-center justify-between text-sm text-muted-foreground'>
+                        <div className='flex items-center gap-1.5'>
+                          <User className='h-3.5 w-3.5' />
+                          <span className='max-w-[80px] truncate text-xs'>
+                            {dept.head?.fullName ?? 'No head'}
+                          </span>
+                        </div>
+                        <div className='flex items-center gap-1.5'>
+                          <Users className='h-3.5 w-3.5' />
+                          <span className='text-xs'>
+                            {dept._count.employees}
+                          </span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          )}
+        </div>
+
+        {/* Employee Table */}
+        <div className='mt-2'>
+          <h3 className='mb-3 text-lg font-semibold'>Department Employees</h3>
+          <DepartmentEmployeesTable
+            selectedDepartmentId={isAll ? 'all' : selectedId}
+            selectedDepartmentName={
+              isAll ? 'All Departments' : (selectedDepartment?.name ?? '')
+            }
+            employeeCount={
+              isAll
+                ? totalEmployees
+                : (selectedDepartment?._count.employees ?? 0)
+            }
+          />
+        </div>
       </Main>
     </>
   )
