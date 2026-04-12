@@ -43,8 +43,6 @@ export function ProfileDropdown() {
     .slice(0, 2)
     .toUpperCase()
 
-  console.log('userData:', userData)
-
   return (
     <>
       <DropdownMenu modal={false}>
