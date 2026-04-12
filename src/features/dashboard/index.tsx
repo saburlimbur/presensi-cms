@@ -1,4 +1,5 @@
-import { Button } from '@/components/ui/button'
+import { CheckCircle, Clock, FileText, UserMinus } from 'lucide-react'
+import ApiService from '@/lib/axios'
 import {
   Card,
   CardContent,
@@ -6,19 +7,29 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { TopNav } from '@/components/layout/top-nav'
+import { NotificationDropdown } from '@/components/notification-dropdown'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { useAllUserAttendance } from '../attendances/hooks/use-all-user-attendance'
+import useGetEmployee from '../employees/hooks/use-get-employee'
 import { Analytics } from './components/analytics'
 import { Overview } from './components/overview'
-import { RecentSales } from './components/recent-sales'
+import { RecentAttendance } from './components/recent-attendance'
 
 export function Dashboard() {
+  const { employees, isLoading: isLoadingEmployee } = useGetEmployee()
+  const { allUserAttendance, isLoading: isLoadingAttendance } =
+    useAllUserAttendance()
+
+  const totalEmployeeData = employees?.pagination?.total || 0
+
   return (
     <>
       {/* ===== Top Heading ===== */}
@@ -27,7 +38,7 @@ export function Dashboard() {
         <div className='ms-auto flex items-center space-x-4'>
           <Search />
           <ThemeSwitch />
-          <ConfigDrawer />
+          <NotificationDropdown />
           <ProfileDropdown />
         </div>
       </Header>
@@ -59,123 +70,96 @@ export function Dashboard() {
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Total Revenue
+                    Total Employees
                   </CardTitle>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    className='h-4 w-4 text-muted-foreground'
-                  >
-                    <path d='M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6' />
-                  </svg>
+                  <UserMinus className='h-4 w-4 text-muted-foreground' />
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>$45,231.89</div>
+                  <div className='text-2xl font-bold'>
+                    {isLoadingEmployee ? (
+                      <Skeleton className='h-7 w-12 pb-2' />
+                    ) : (
+                      totalEmployeeData
+                    )}
+                  </div>
                   <p className='text-xs text-muted-foreground'>
-                    +20.1% from last month
+                    Active staff members
                   </p>
                 </CardContent>
               </Card>
+
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Subscriptions
+                    Present Today
                   </CardTitle>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    className='h-4 w-4 text-muted-foreground'
-                  >
-                    <path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2' />
-                    <circle cx='9' cy='7' r='4' />
-                    <path d='M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75' />
-                  </svg>
+                  <CheckCircle className='h-4 w-4 text-muted-foreground' />
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+2350</div>
+                  <div className='text-2xl font-bold'>
+                    {isLoadingAttendance ? (
+                      <Skeleton className='h-7 w-12 pb-2' />
+                    ) : (
+                      allUserAttendance?.pagination?.total
+                    )}
+                  </div>
                   <p className='text-xs text-muted-foreground'>
-                    +180.1% from last month
+                    Recorded attendances today
                   </p>
                 </CardContent>
               </Card>
-              <Card>
-                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-                  <CardTitle className='text-sm font-medium'>Sales</CardTitle>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    className='h-4 w-4 text-muted-foreground'
-                  >
-                    <rect width='20' height='14' x='2' y='5' rx='2' />
-                    <path d='M2 10h20' />
-                  </svg>
-                </CardHeader>
-                <CardContent>
-                  <div className='text-2xl font-bold'>+12,234</div>
-                  <p className='text-xs text-muted-foreground'>
-                    +19% from last month
-                  </p>
-                </CardContent>
-              </Card>
+
               <Card>
                 <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
                   <CardTitle className='text-sm font-medium'>
-                    Active Now
+                    Late Arrivals
                   </CardTitle>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    viewBox='0 0 24 24'
-                    fill='none'
-                    stroke='currentColor'
-                    strokeLinecap='round'
-                    strokeLinejoin='round'
-                    strokeWidth='2'
-                    className='h-4 w-4 text-muted-foreground'
-                  >
-                    <path d='M22 12h-4l-3 9L9 3l-3 9H2' />
-                  </svg>
+                  <Clock className='h-4 w-4 text-muted-foreground' />
                 </CardHeader>
                 <CardContent>
-                  <div className='text-2xl font-bold'>+573</div>
+                  <div className='text-2xl font-bold'>12</div>
                   <p className='text-xs text-muted-foreground'>
-                    +201 since last hour
+                    Requires attention
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+                  <CardTitle className='text-sm font-medium'>
+                    Pending Requests
+                  </CardTitle>
+                  <FileText className='h-4 w-4 text-muted-foreground' />
+                </CardHeader>
+                <CardContent>
+                  <div className='text-2xl font-bold'>8</div>
+                  <p className='text-xs text-muted-foreground'>
+                    Permissions & Overtime
                   </p>
                 </CardContent>
               </Card>
             </div>
+
             <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
               <Card className='col-span-1 lg:col-span-4'>
                 <CardHeader>
-                  <CardTitle>Overview</CardTitle>
+                  <CardTitle>Attendance Trends</CardTitle>
                 </CardHeader>
                 <CardContent className='ps-2'>
-                  <Overview />
+                  <Overview />{' '}
+                  {/* Pastikan Overview.tsx menampilkan Chart Kehadiran */}
                 </CardContent>
               </Card>
               <Card className='col-span-1 lg:col-span-3'>
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
+                  <CardTitle>Recent Attendance</CardTitle>
                   <CardDescription>
-                    You made 265 sales this month.
+                    Latest check-ins from employees.
                   </CardDescription>
+                  <Separator />
                 </CardHeader>
                 <CardContent>
-                  <RecentSales />
+                  <RecentAttendance />
                 </CardContent>
               </Card>
             </div>
@@ -192,25 +176,19 @@ export function Dashboard() {
 const topNav = [
   {
     title: 'Overview',
-    href: 'dashboard/overview',
+    href: '/',
     isActive: true,
-    disabled: true,
+    disabled: false,
   },
   {
-    title: 'Customers',
-    href: 'dashboard/customers',
+    title: 'Detailed Analytics',
+    href: '/dashboard/analytics',
     isActive: false,
     disabled: true,
   },
   {
-    title: 'Products',
-    href: 'dashboard/products',
-    isActive: false,
-    disabled: true,
-  },
-  {
-    title: 'Settings',
-    href: 'dashboard/settings',
+    title: 'System Logs',
+    href: '/dashboard/audit',
     isActive: false,
     disabled: true,
   },
