@@ -1,4 +1,3 @@
-import api from '@/lib/axios'
 import ApiService from '@/lib/axios'
 import { User } from '@/features/users/data/schema'
 
@@ -18,20 +17,18 @@ export interface UserCreatePayload {
   fullName: string
   email: string
   phone: string
-  employeeId: string
+  departmentCode: string // backend resolve ke departmentId
   position: string
-  role: string
   password: string
+  role?: 'ADMIN' | 'EMPLOYEE' // default 'EMPLOYEE' di backend
+  joinDate?: string // ISO date, opsional
 }
 
+// Catatan: backend belum punya endpoint generic PUT /users/:id.
+// Field employeeId di-generate backend — tidak boleh diubah dari frontend.
 export interface UserUpdatePayload {
-  fullName: string
-  email: string
-  phone: string
-  employeeId: string
-  position: string
-  role: string
-  password?: string
+  fullName?: string
+  phone?: string
 }
 
 export const employeeService = {

@@ -1,5 +1,4 @@
 import { getRouteApi } from '@tanstack/react-router'
-import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { NotificationDropdown } from '@/components/notification-dropdown'
@@ -17,7 +16,7 @@ function Employees() {
   const search = route.useSearch() // params dari URL (page, limit, search, dll)
   const navigate = route.useNavigate()
 
-  const { employees, isLoading } = useGetEmployee()
+  const { employees } = useGetEmployee()
 
   return (
     <>
