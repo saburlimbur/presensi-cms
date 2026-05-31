@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Building2, Check, LayoutGrid, User, Users } from 'lucide-react'
+import { Building2, LayoutGrid, User, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
