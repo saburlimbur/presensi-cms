@@ -192,7 +192,20 @@ export function ShiftFormDialog({
                 <FormItem>
                   <FormLabel>Grace Period (minutes)</FormLabel>
                   <FormControl>
-                    <Input type='number' min={0} max={180} {...field} />
+                    <Input
+                      type='number'
+                      min={0}
+                      max={180}
+                      name={field.name}
+                      ref={field.ref}
+                      onBlur={field.onBlur}
+                      value={field.value ?? ''}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value === '' ? 0 : e.target.valueAsNumber
+                        )
+                      }
+                    />
                   </FormControl>
                   <FormDescription className='text-[11px]'>
                     Toleransi keterlambatan sebelum dianggap LATE.

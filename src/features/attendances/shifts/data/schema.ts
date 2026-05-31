@@ -38,8 +38,10 @@ export const shiftFormSchema = z.object({
   name: shiftNameEnum,
   startTime: z.string().min(1, 'Start time is required'),
   endTime: z.string().min(1, 'End time is required'),
-  gracePeriod: z.coerce.number().int().min(0).max(180),
+  // tanpa z.coerce / .default supaya tipe input == output schema; konversi
+  // angka dari <input type="number"> ditangani di field onChange.
+  gracePeriod: z.number().int().min(0).max(180),
   description: z.string().max(255).optional().or(z.literal('')),
-  isActive: z.boolean().default(false),
+  isActive: z.boolean(),
 })
 export type ShiftFormValues = z.infer<typeof shiftFormSchema>
