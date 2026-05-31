@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 import { IconFacebook, IconGithub } from '@/assets/brand-icons'
 import { useAuthStore } from '@/stores/auth-store'
 import ApiService from '@/lib/axios'
-import { sleep, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -65,6 +65,8 @@ export function UserAuthForm({
         success: (response) => {
           setIsLoading(false)
 
+          // console.log('[login] raw response.data =', response.data)
+
           const { accessToken, user } = response.data.data
 
           auth.setAccessToken(accessToken)
@@ -77,6 +79,8 @@ export function UserAuthForm({
         },
         error: (err) => {
           setIsLoading(false)
+          // eslint-disable-next-line no-console
+          console.error('[login] error =', err, 'response =', err?.response)
           return (
             err.response?.data?.message ||
             'Login failed. Please check your credentials.'
