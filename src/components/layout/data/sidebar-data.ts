@@ -1,7 +1,8 @@
 import {
+  Bell,
   Building2,
   Clock,
-  ClipboardList,
+  FileBarChart,
   FileText,
   LayoutDashboard,
   MapPin,
@@ -14,11 +15,11 @@ import {
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
-  user: {
-    name: 'Admin',
-    email: 'admin@attendance.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
+  // user: {
+  //   name: 'Admin',
+  //   email: 'admin@attendance.com',
+  //   avatar: '/avatars/shadcn.jpg',
+  // },
   teams: [
     {
       name: 'Attendance Admin',
@@ -51,9 +52,9 @@ export const sidebarData: SidebarData = {
       title: 'Attendance',
       items: [
         {
-          title: 'Records',
-          url: '/attendances/records',
-          icon: ClipboardList,
+          title: 'Reports',
+          url: '/attendances/reports',
+          icon: FileBarChart,
         },
         {
           title: 'Locations',
@@ -85,6 +86,11 @@ export const sidebarData: SidebarData = {
     {
       title: 'System',
       items: [
+        {
+          title: 'Notifications',
+          url: '/notifications',
+          icon: Bell,
+        },
         {
           title: 'Audit Logs',
           url: '/audit-logs',

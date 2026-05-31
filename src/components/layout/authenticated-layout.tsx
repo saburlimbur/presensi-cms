@@ -1,4 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
+import useAdminEventStream from '@/features/notifications/hooks/use-admin-event-stream'
 import { getCookie } from '@/lib/cookies'
 import { cn } from '@/lib/utils'
 import { LayoutProvider } from '@/context/layout-provider'
@@ -13,6 +14,12 @@ type AuthenticatedLayoutProps = {
 
 export function AuthenticatedLayout({ children }: AuthenticatedLayoutProps) {
   const defaultOpen = getCookie('sidebar_state') !== 'false'
+
+  // Subscribe ke admin SSE channel sekali per session (1 koneksi EventSource
+  // global). Event → invalidate query notifications + toast. Mount di sini
+  // supaya navigasi antar-route tidak menutup/membuka koneksi.
+  useAdminEventStream()
+
   return (
     <SearchProvider>
       <LayoutProvider>
