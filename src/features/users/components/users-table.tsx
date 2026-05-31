@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/table'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
 import useGetAllDepartments from '@/features/departments/hooks/useGetAllDepartments'
-import { roles, positions } from '../data/data'
+import { roles } from '../data/data'
 import { type User } from '../data/schema'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { usersColumns as columns } from './users-columns'

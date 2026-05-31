@@ -31,14 +31,16 @@ export const users: User[] = Array.from({ length: 100 }, () => {
     fullName,
     phone: faker.phone.number({ style: 'international' }),
     employeeId: `EMP-${faker.string.numeric(5)}`,
-    departmentId: faker.string.uuid(),
-    departmentName: deptName,
+    department: {
+      id: faker.string.uuid(),
+      name: deptName,
+      code: deptName.slice(0, 3).toUpperCase(),
+    },
     position: faker.helpers.arrayElement(positionValues),
     role: faker.helpers.arrayElement(['ADMIN', 'EMPLOYEE'] as const),
     joinDate: faker.date.past({ years: 5 }),
     isActive: faker.datatype.boolean({ probability: 0.85 }),
     isFaceRegistered: faker.datatype.boolean({ probability: 0.6 }),
     createdAt: faker.date.past(),
-    updatedAt: faker.date.recent(),
   }
 })

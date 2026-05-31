@@ -15,20 +15,16 @@ export interface UserCreatePayload {
   fullName: string
   email: string
   phone: string
-  employeeId: string
+  departmentCode: string // backend resolve ke departmentId
   position: string
-  role: string
   password: string
+  role?: 'ADMIN' | 'EMPLOYEE' // default 'EMPLOYEE'
+  joinDate?: string
 }
 
 export interface UserUpdatePayload {
-  fullName: string
-  email: string
-  phone: string
-  employeeId: string
-  position: string
-  role: string
-  password?: string
+  fullName?: string
+  phone?: string
 }
 
 export const usersService = {
@@ -43,7 +39,7 @@ export const usersService = {
   },
 
   getProfile: async () => {
-    const res = await api.get<User>('/users/profile')
+    const res = await api.get<{ data: User }>('/users/profile')
     return res.data.data
   },
 
