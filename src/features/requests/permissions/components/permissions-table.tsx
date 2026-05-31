@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 import { ArrowUpRight, FileText } from 'lucide-react'
+import { getAssetUrl } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -68,7 +69,7 @@ export function PermissionsTable({ data }: { data: Permission[] }) {
                 <TableCell>
                   {row.attachmentUrl ? (
                     <a
-                      href={row.attachmentUrl}
+                      href={getAssetUrl(row.attachmentUrl)}
                       target='_blank'
                       rel='noreferrer'
                       className={cn(
