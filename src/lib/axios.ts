@@ -4,10 +4,20 @@ import { getCookie, removeCookie } from './cookies'
 const ACCESS_TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY
 const REFRESH_TOKEN_KEY = import.meta.env.VITE_REFRESH_TOKEN_KEY
 
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
+// Fallback tunnel (ngrok) — dipakai otomatis kalau request ke API utama gagal
+// karena jaringan (mis. server localhost tak terjangkau). Kosongkan kalau tidak
+// pakai tunnel.
+export const API_BASE_URL_FALLBACK =
+  import.meta.env.VITE_API_BASE_URL_FALLBACK ?? ''
+
 const ApiService = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
+    // ngrok free menyisipkan halaman warning HTML sebelum response; header ini
+    // (nilai bebas) membuat ngrok melewatinya → response tetap JSON.
+    'ngrok-skip-browser-warning': 'true',
   },
 })
 
@@ -23,6 +33,20 @@ ApiService.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config
+
+    // FALLBACK TUNNEL: network error (tidak ada response) & punya URL fallback &
+    // belum pernah di-fallback → retry sekali lewat base URL tunnel (ngrok).
+    if (
+      !error.response &&
+      API_BASE_URL_FALLBACK &&
+      originalRequest &&
+      !originalRequest._fallback &&
+      originalRequest.baseURL !== API_BASE_URL_FALLBACK
+    ) {
+      originalRequest._fallback = true
+      originalRequest.baseURL = API_BASE_URL_FALLBACK
+      return ApiService(originalRequest)
+    }
 
     // Cegah loop refresh jika request aslinya adalah login
     if (originalRequest.url?.includes('/users/login')) {

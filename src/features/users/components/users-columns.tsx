@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTableColumnHeader } from '@/components/data-table'
-import { LongText } from '@/components/long-text'
 import { statusTypes, roles, positions } from '../data/data'
 import { type User } from '../data/schema'
 import { DataTableRowActions } from './data-table-row-actions'
@@ -53,30 +52,6 @@ export const usersColumns: ColumnDef<User>[] = [
     },
     enableHiding: false,
   },
-  // {
-  //   accessorKey: 'fullName',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Full Name' />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <LongText className='max-w-36 text-xs'>
-  //       {row.getValue('fullName')}
-  //     </LongText>
-  //   ),
-  //   meta: { className: 'w-36' },
-  // },
-  // {
-  //   accessorKey: 'email',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Email' />
-  //   ),
-  //   cell: ({ row }) => (
-  //     <div className='w-fit ps-2 text-xs text-nowrap'>
-  //       {row.getValue('email')}
-  //     </div>
-  //   ),
-  // },
-  //
   {
     accessorKey: 'fullName',
     header: ({ column }) => (
@@ -106,23 +81,18 @@ export const usersColumns: ColumnDef<User>[] = [
       )
     },
   },
-  // {
-  //   accessorKey: 'phone',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title='Phone' />
-  //   ),
-  //   cell: ({ row }) => <div className='text-xs'>{row.getValue('phone')}</div>,
-  //   enableSorting: false,
-  // },
   {
-    accessorKey: 'department',
+    id: 'department',
+    accessorFn: (row) => row.department?.name ?? '',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Department' />
     ),
     cell: ({ row }) => {
       const dept = row.original.department
-      return <div className='text-xs'>{dept?.code ?? '-'}</div>
+      return <div className='text-xs'>{dept?.name ?? '-'}</div>
     },
+    filterFn: (row, id, value) => value.includes(row.getValue(id)),
+    enableSorting: false,
   },
   {
     accessorKey: 'position',
@@ -195,24 +165,24 @@ export const usersColumns: ColumnDef<User>[] = [
     },
     enableSorting: false,
   },
-  {
-    accessorKey: 'isFaceRegistered',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Face' />
-    ),
-    cell: ({ row }) => {
-      const registered = row.getValue('isFaceRegistered') as boolean
-      return (
-        <Badge
-          variant={registered ? 'default' : 'secondary'}
-          className='text-xs'
-        >
-          {registered ? 'Registered' : 'Not Yet'}
-        </Badge>
-      )
-    },
-    enableSorting: false,
-  },
+  // {
+  //   accessorKey: 'isFaceRegistered',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title='Face' />
+  //   ),
+  //   cell: ({ row }) => {
+  //     const registered = row.getValue('isFaceRegistered') as boolean
+  //     return (
+  //       <Badge
+  //         variant={registered ? 'default' : 'secondary'}
+  //         className='text-xs'
+  //       >
+  //         {registered ? 'Registered' : 'Not Yet'}
+  //       </Badge>
+  //     )
+  //   },
+  //   enableSorting: false,
+  // },
   {
     accessorKey: 'joinDate',
     header: ({ column }) => (

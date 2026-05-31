@@ -26,7 +26,7 @@ export const roles = [
   {
     label: 'Admin',
     value: 'ADMIN',
-    // icon: Shield,
+    icon: Shield,
   },
   {
     label: 'Employee',

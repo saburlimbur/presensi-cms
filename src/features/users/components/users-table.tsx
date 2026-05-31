@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   type SortingState,
   type VisibilityState,
@@ -11,8 +11,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import { Plus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { type NavigateFn, useTableUrlState } from '@/hooks/use-table-url-state'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -22,10 +24,12 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DataTablePagination, DataTableToolbar } from '@/components/data-table'
-import { roles, positions } from '../data/data'
+import useGetAllDepartments from '@/features/departments/hooks/useGetAllDepartments'
+import { roles } from '../data/data'
 import { type User } from '../data/schema'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { usersColumns as columns } from './users-columns'
+import { useUsers } from './users-provider'
 
 type DataTableProps = {
   data: User[]
@@ -34,6 +38,17 @@ type DataTableProps = {
 }
 
 export function UsersTable({ data, search, navigate }: DataTableProps) {
+  const { setOpen } = useUsers()
+  const { data: departments } = useGetAllDepartments()
+  console.log('departments', departments)
+  const departmentOptions = useMemo(() => {
+    if (!departments) return []
+    return departments.map((dept: { id: string; name: string }) => ({
+      label: dept.name,
+      value: dept.name,
+    }))
+  }, [departments])
+
   const [rowSelection, setRowSelection] = useState({})
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [sorting, setSorting] = useState<SortingState>([])
@@ -68,6 +83,11 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
       {
         columnId: 'position',
         searchKey: 'position',
+        type: 'array',
+      },
+      {
+        columnId: 'department',
+        searchKey: 'department',
         type: 'array',
       },
     ],
@@ -109,10 +129,11 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
         'flex flex-1 flex-col gap-4'
       )}
     >
-      <DataTableToolbar
-        table={table}
-        searchPlaceholder='Filter employees...'
-        searchKey='fullName'
+      <div className='flex items-center justify-between gap-2'>
+        <DataTableToolbar
+          table={table}
+          searchPlaceholder='Filter employees by name'
+          searchKey='fullName'
         filters={[
           {
             columnId: 'isActive',
@@ -134,15 +155,25 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
             options: roles.map((role) => ({ ...role })),
           },
           {
-            columnId: 'position',
-            title: 'Position',
-            options: positions.map((p) => ({
-              label: p.label,
-              value: p.value,
-            })),
+            columnId: 'department',
+            title: 'Department',
+            options: departmentOptions,
           },
+          // {
+          //   columnId: 'position',
+          //   title: 'Position',
+          //   options: positions.map((p) => ({
+          //     label: p.label,
+          //     value: p.value,
+          //   })),
+          // },
         ]}
       />
+        <Button size='sm' className='h-8' onClick={() => setOpen('add')}>
+          <Plus className='size-4' />
+          Add Employee
+        </Button>
+      </div>
       <div className='overflow-hidden rounded-md border'>
         <Table>
           <TableHeader>
