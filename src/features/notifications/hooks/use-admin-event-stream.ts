@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { getCookie } from '@/lib/cookies'
+import { playNotificationSound } from '@/lib/notification-sound'
 import { openAdminStream } from '../api/events.sse'
 
 const ACCESS_TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY
@@ -32,6 +33,10 @@ export default function useAdminEventStream(enabled = true) {
         queryClient.invalidateQueries({ queryKey: ['notifications'] })
       },
       onEvent: (name, payload) => {
+        // bunyikan suara tiap notif masuk — termasuk saat tab di background,
+        // supaya admin tetap "ngeh" walau lagi buka tab lain.
+        playNotificationSound()
+
         queryClient.invalidateQueries({ queryKey: ['notifications'] })
         // Event check-in/out: refresh data attendance + rekap dashboard
         // langsung dari SSE (≈instan), tanpa nunggu polling.
