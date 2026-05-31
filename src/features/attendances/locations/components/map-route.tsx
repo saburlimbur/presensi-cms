@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import {
   Loader2,
-  Clock,
   Route,
   LogIn,
   LogOut,
@@ -11,7 +10,6 @@ import {
   Navigation,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import {
   Map,
   MapMarker,
