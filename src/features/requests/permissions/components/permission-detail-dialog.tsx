@@ -8,6 +8,7 @@ import {
   User as UserIcon,
   type LucideIcon,
 } from 'lucide-react'
+import { getAssetUrl } from '@/lib/assets'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -113,7 +114,7 @@ export function PermissionDetailDialog({
                 Attachment
               </div>
               <a
-                href={data.attachmentUrl}
+                href={getAssetUrl(data.attachmentUrl)}
                 target='_blank'
                 rel='noreferrer'
                 className='inline-flex items-center gap-2 rounded-md border bg-background px-3 py-2 text-xs hover:bg-muted'
