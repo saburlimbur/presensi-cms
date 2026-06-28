@@ -21,7 +21,6 @@ export const employeeFormSchema = z
     phone: z.string().min(8, 'Phone number minimal 8 karakter.'),
     departmentCode: z.string().min(1, 'Department is required.'),
     position: z.string().min(1, 'Position is required.'),
-    role: z.string().min(1, 'Role is required.'),
     password: z.string().transform((pwd) => pwd.trim()),
     confirmPassword: z.string().transform((pwd) => pwd.trim()),
     isEdit: z.boolean(),

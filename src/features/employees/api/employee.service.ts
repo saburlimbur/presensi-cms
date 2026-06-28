@@ -24,11 +24,16 @@ export interface UserCreatePayload {
   joinDate?: string // ISO date, opsional
 }
 
-// Catatan: backend belum punya endpoint generic PUT /users/:id.
 // Field employeeId di-generate backend — tidak boleh diubah dari frontend.
 export interface UserUpdatePayload {
   fullName?: string
+  email?: string
   phone?: string
+  departmentCode?: string
+  position?: string
+  role?: 'ADMIN' | 'EMPLOYEE'
+  isActive?: boolean
+  password?: string
 }
 
 export const employeeService = {
@@ -53,17 +58,21 @@ export const employeeService = {
   },
 
   update: async (id: string, payload: UserUpdatePayload) => {
-    const res = await ApiService.put<User>(`/users/${id}`, payload)
+    const res = await ApiService.patch<User>(`/users/${id}`, payload)
     return res.data
   },
 
+  // Backend sengaja tidak meng-hard-delete user demi menjaga histori
+  // absensi/FK. "Hapus" = nonaktifkan akun (PATCH isActive:false).
   delete: async (id: string) => {
-    const res = await ApiService.delete(`/users/${id}`)
+    const res = await ApiService.patch(`/users/${id}`, { isActive: false })
     return res.data
   },
 
   deleteMany: async (ids: string[]) => {
-    const res = await ApiService.delete('/users', { data: { ids } })
-    return res.data
+    const res = await Promise.all(
+      ids.map((id) => ApiService.patch(`/users/${id}`, { isActive: false }))
+    )
+    return res.map((r) => r.data)
   },
 }

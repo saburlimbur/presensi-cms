@@ -24,7 +24,13 @@ export interface UserCreatePayload {
 
 export interface UserUpdatePayload {
   fullName?: string
+  email?: string
   phone?: string
+  departmentCode?: string // backend resolve ke departmentId
+  position?: string
+  role?: 'ADMIN' | 'EMPLOYEE'
+  isActive?: boolean
+  password?: string
 }
 
 export const usersService = {
@@ -49,17 +55,21 @@ export const usersService = {
   },
 
   update: async (id: string, payload: UserUpdatePayload) => {
-    const res = await api.put<User>(`/users/${id}`, payload)
+    const res = await api.patch<User>(`/users/${id}`, payload)
     return res.data
   },
 
+  // Backend sengaja tidak meng-hard-delete user demi menjaga histori
+  // absensi/FK. "Hapus" di UI = nonaktifkan akun (PATCH isActive:false).
   delete: async (id: string) => {
-    const res = await api.delete(`/users/${id}`)
+    const res = await api.patch(`/users/${id}`, { isActive: false })
     return res.data
   },
 
   deleteMany: async (ids: string[]) => {
-    const res = await api.delete('/users', { data: { ids } })
-    return res.data
+    const res = await Promise.all(
+      ids.map((id) => api.patch(`/users/${id}`, { isActive: false }))
+    )
+    return res.map((r) => r.data)
   },
 }
