@@ -1,39 +1,31 @@
 import ApiService from '@/lib/axios'
 import { type Shift, type ShiftFormValues } from '../data/schema'
 
-// Skeleton — sesuaikan response shape saat integrasi.
-// Endpoints (admin only): lihat backend src/modules/shifts/shifts.routes.js
-//   GET    /shifts
-//   GET    /shifts/:id
-//   POST   /shifts
-//   PUT    /shifts/:id
-//   DELETE /shifts/:id
 export const shiftsService = {
-  getAll: async (_params?: Record<string, unknown>) => {
-    // TODO(integrasi): const res = await ApiService.get('/shifts', { params: _params })
-    return [] as Shift[]
+  getAll: async (params?: Record<string, unknown>): Promise<Shift[]> => {
+    const res = await ApiService.get('/shifts', { params })
+    return (res.data?.data ?? []) as Shift[]
   },
 
-  getById: async (_id: string) => {
-    // TODO(integrasi): const res = await ApiService.get(`/shifts/${_id}`)
-    return null as Shift | null
+  getById: async (id: string): Promise<Shift | null> => {
+    const res = await ApiService.get(`/shifts/${id}`)
+    return (res.data?.data ?? null) as Shift | null
   },
 
-  create: async (_payload: ShiftFormValues) => {
-    // TODO(integrasi): const res = await ApiService.post('/shifts', _payload)
-    return null as Shift | null
+  create: async (payload: ShiftFormValues): Promise<Shift> => {
+    const res = await ApiService.post('/shifts', payload)
+    return res.data.data as Shift
   },
 
-  update: async (_id: string, _payload: Partial<ShiftFormValues>) => {
-    // TODO(integrasi): const res = await ApiService.put(`/shifts/${_id}`, _payload)
-    return null as Shift | null
+  update: async (
+    id: string,
+    payload: Partial<ShiftFormValues>
+  ): Promise<Shift> => {
+    const res = await ApiService.put(`/shifts/${id}`, payload)
+    return res.data.data as Shift
   },
 
-  delete: async (_id: string) => {
-    // TODO(integrasi): const res = await ApiService.delete(`/shifts/${_id}`)
-    return null
+  delete: async (id: string): Promise<void> => {
+    await ApiService.delete(`/shifts/${id}`)
   },
 }
-
-// Jaga import agar tidak hilang saat unused di skeleton.
-export { ApiService }

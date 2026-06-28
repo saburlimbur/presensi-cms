@@ -26,7 +26,7 @@ export const attendancesApi = {
 
   getUserSummary: async () => {
     const response = await ApiService.get(
-      '//attendance/user-summary-attendances'
+      '/attendance/user-summary-attendances'
     )
     return response.data
   },

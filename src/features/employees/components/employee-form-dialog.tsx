@@ -24,7 +24,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
 import useGetAllDepartments from '@/features/departments/hooks/useGetAllDepartments'
-import { roles, positions } from '@/features/users/data/data'
+import { positions } from '@/features/users/data/data'
 import {
   type User,
   type Department,
@@ -64,7 +64,6 @@ export function EmployeeFormDialog({
         phone: currentRow.phone,
         departmentCode: currentRow.department?.code ?? '',
         position: currentRow.position,
-        role: currentRow.role,
         password: '',
         confirmPassword: '',
         isEdit,
@@ -75,7 +74,6 @@ export function EmployeeFormDialog({
         phone: '',
         departmentCode: '',
         position: '',
-        role: 'EMPLOYEE',
         password: '',
         confirmPassword: '',
         isEdit,
@@ -103,7 +101,7 @@ export function EmployeeFormDialog({
         phone: values.phone,
         departmentCode: values.departmentCode,
         position: values.position,
-        role: values.role as 'ADMIN' | 'EMPLOYEE',
+        role: 'EMPLOYEE',
       },
       {
         onSuccess: () => {
@@ -237,26 +235,6 @@ export function EmployeeFormDialog({
                       placeholder='Select position'
                       className='col-span-4'
                       items={positions.map(({ label, value }) => ({
-                        label,
-                        value,
-                      }))}
-                    />
-                    <FormMessage className='col-span-4 col-start-3' />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name='role'
-                render={({ field }) => (
-                  <FormItem className='grid grid-cols-6 items-center space-y-0 gap-x-4 gap-y-1'>
-                    <FormLabel className='col-span-2 text-end'>Role</FormLabel>
-                    <SelectDropdown
-                      defaultValue={field.value}
-                      onValueChange={field.onChange}
-                      placeholder='Select role'
-                      className='col-span-4'
-                      items={roles.map(({ label, value }) => ({
                         label,
                         value,
                       }))}

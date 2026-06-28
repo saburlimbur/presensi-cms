@@ -208,8 +208,10 @@ function Locations() {
                         Coordinates
                       </span>
                       <span className='max-w-[150px] truncate font-bold'>
-                        {activeRecord.latitudeIn.toFixed(4)},{' '}
-                        {activeRecord.longitudeIn.toFixed(4)}
+                        {activeRecord.latitudeIn != null &&
+                        activeRecord.longitudeIn != null
+                          ? `${activeRecord.latitudeIn.toFixed(4)}, ${activeRecord.longitudeIn.toFixed(4)}`
+                          : 'N/A'}
                       </span>
                     </div>
                     <div className='flex items-center justify-between text-xs'>
@@ -336,7 +338,9 @@ function Locations() {
                 icon={MapPin}
                 message='Belum ada lokasi untuk ditampilkan'
               />
-            ) : activeRecord ? (
+            ) : activeRecord &&
+              activeRecord.latitudeIn != null &&
+              activeRecord.longitudeIn != null ? (
               <MapRouteDistance
                 lat={activeRecord.latitudeIn}
                 lng={activeRecord.longitudeIn}
@@ -348,6 +352,11 @@ function Locations() {
                 workMode={activeRecord.workMode}
                 note={activeRecord.note}
                 key={activeRecord.id}
+              />
+            ) : activeRecord ? (
+              <LocationsMapPlaceholder
+                icon={MapPin}
+                message='Karyawan ini tidak memiliki data koordinat GPS'
               />
             ) : null}
           </div>
