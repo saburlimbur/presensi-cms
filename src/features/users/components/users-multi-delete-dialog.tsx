@@ -4,11 +4,11 @@ import { useState } from 'react'
 import { type Table } from '@tanstack/react-table'
 import { AlertTriangle } from 'lucide-react'
 import { toast } from 'sonner'
-import { sleep } from '@/lib/utils'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
+import { useDeleteManyUsers } from '../api/users.queries'
 
 type UserMultiDeleteDialogProps<TData> = {
   open: boolean
@@ -16,7 +16,7 @@ type UserMultiDeleteDialogProps<TData> = {
   table: Table<TData>
 }
 
-const CONFIRM_WORD = 'DELETE'
+const CONFIRM_WORD = 'DEACTIVATE'
 
 export function UsersMultiDeleteDialog<TData>({
   open,
@@ -24,6 +24,7 @@ export function UsersMultiDeleteDialog<TData>({
   table,
 }: UserMultiDeleteDialogProps<TData>) {
   const [value, setValue] = useState('')
+  const deleteManyUsers = useDeleteManyUsers()
 
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
@@ -33,18 +34,14 @@ export function UsersMultiDeleteDialog<TData>({
       return
     }
 
-    onOpenChange(false)
+    const ids = selectedRows.map((row) => (row.original as { id: string }).id)
 
-    toast.promise(sleep(2000), {
-      loading: 'Deleting users...',
-      success: () => {
+    deleteManyUsers.mutate(ids, {
+      onSuccess: () => {
         setValue('')
         table.resetRowSelection()
-        return `Deleted ${selectedRows.length} ${
-          selectedRows.length > 1 ? 'users' : 'user'
-        }`
+        onOpenChange(false)
       },
-      error: 'Error',
     })
   }
 
@@ -53,22 +50,23 @@ export function UsersMultiDeleteDialog<TData>({
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== CONFIRM_WORD}
+      disabled={value.trim() !== CONFIRM_WORD || deleteManyUsers.isPending}
       title={
         <span className='text-destructive'>
           <AlertTriangle
             className='me-1 inline-block stroke-destructive'
             size={18}
           />{' '}
-          Delete {selectedRows.length}{' '}
+          Deactivate {selectedRows.length}{' '}
           {selectedRows.length > 1 ? 'users' : 'user'}
         </span>
       }
       desc={
         <div className='space-y-4'>
           <p className='mb-2'>
-            Are you sure you want to delete the selected users? <br />
-            This action cannot be undone.
+            Are you sure you want to deactivate the selected users? <br />
+            Their accounts will be disabled but history is kept. You can
+            re-activate them later.
           </p>
 
           <Label className='my-4 flex flex-col items-start gap-1.5'>
@@ -81,14 +79,14 @@ export function UsersMultiDeleteDialog<TData>({
           </Label>
 
           <Alert variant='destructive'>
-            <AlertTitle>Warning!</AlertTitle>
+            <AlertTitle>Heads up!</AlertTitle>
             <AlertDescription>
-              Please be careful, this operation can not be rolled back.
+              The selected employees will lose access until re-activated.
             </AlertDescription>
           </Alert>
         </div>
       }
-      confirmText='Delete'
+      confirmText={deleteManyUsers.isPending ? 'Deactivating...' : 'Deactivate'}
       destructive
     />
   )

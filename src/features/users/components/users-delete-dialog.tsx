@@ -2,11 +2,11 @@
 
 import { useState } from 'react'
 import { AlertTriangle } from 'lucide-react'
-import { showSubmittedData } from '@/lib/show-submitted-data'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
+import { useDeleteUser } from '../api/users.queries'
 import { type User } from '../data/schema'
 
 type UserDeleteDialogProps = {
@@ -21,12 +21,14 @@ export function UsersDeleteDialog({
   currentRow,
 }: UserDeleteDialogProps) {
   const [value, setValue] = useState('')
+  const deleteUser = useDeleteUser()
 
   const handleDelete = () => {
     if (value.trim() !== currentRow.employeeId) return
 
-    onOpenChange(false)
-    showSubmittedData(currentRow, 'The following employee has been deleted:')
+    deleteUser.mutate(currentRow.id, {
+      onSuccess: () => onOpenChange(false),
+    })
   }
 
   return (
@@ -34,25 +36,28 @@ export function UsersDeleteDialog({
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== currentRow.employeeId}
+      disabled={
+        value.trim() !== currentRow.employeeId || deleteUser.isPending
+      }
       title={
         <span className='text-destructive'>
           <AlertTriangle
             className='me-1 inline-block stroke-destructive'
             size={18}
           />{' '}
-          Delete Employee
+          Deactivate Employee
         </span>
       }
       desc={
         <div className='space-y-4'>
           <p className='mb-2'>
-            Are you sure you want to delete{' '}
+            Are you sure you want to deactivate{' '}
             <span className='font-bold'>{currentRow.fullName}</span>?
             <br />
-            This action will permanently remove the employee with ID{' '}
-            <span className='font-bold'>{currentRow.employeeId}</span>{' '}
-            from the system. This cannot be undone.
+            The account with ID{' '}
+            <span className='font-bold'>{currentRow.employeeId}</span> will be
+            disabled (cannot log in), but its attendance history is kept. You
+            can re-activate it later.
           </p>
 
           <Label className='my-2'>
@@ -60,19 +65,19 @@ export function UsersDeleteDialog({
             <Input
               value={value}
               onChange={(e) => setValue(e.target.value)}
-              placeholder='Enter employee ID to confirm deletion.'
+              placeholder='Enter employee ID to confirm.'
             />
           </Label>
 
           <Alert variant='destructive'>
-            <AlertTitle>Warning!</AlertTitle>
+            <AlertTitle>Heads up!</AlertTitle>
             <AlertDescription>
-              Please be careful, this operation can not be rolled back.
+              The employee will lose access until re-activated.
             </AlertDescription>
           </Alert>
         </div>
       }
-      confirmText='Delete'
+      confirmText={deleteUser.isPending ? 'Deactivating...' : 'Deactivate'}
       destructive
     />
   )

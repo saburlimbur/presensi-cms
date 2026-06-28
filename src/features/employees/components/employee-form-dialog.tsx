@@ -73,7 +73,7 @@ export function EmployeeFormDialog({
         email: '',
         phone: '',
         departmentCode: '',
-        position: '',
+        position: 'STAFF',
         password: '',
         confirmPassword: '',
         isEdit,

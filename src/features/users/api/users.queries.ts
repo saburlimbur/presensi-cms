@@ -66,7 +66,7 @@ export function useDeleteUser() {
     mutationFn: (id: string) => usersService.delete(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: usersKeys.lists() })
-      toast.success('Employee deleted successfully.')
+      toast.success('Employee deactivated successfully.')
     },
   })
 }
@@ -79,7 +79,7 @@ export function useDeleteManyUsers() {
     onSuccess: (_data, ids) => {
       queryClient.invalidateQueries({ queryKey: usersKeys.lists() })
       toast.success(
-        `Deleted ${ids.length} ${ids.length > 1 ? 'employees' : 'employee'} successfully.`
+        `Deactivated ${ids.length} ${ids.length > 1 ? 'employees' : 'employee'} successfully.`
       )
     },
   })
