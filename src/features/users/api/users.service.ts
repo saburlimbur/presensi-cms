@@ -59,16 +59,21 @@ export const usersService = {
     return res.data
   },
 
-  // Backend sengaja tidak meng-hard-delete user demi menjaga histori
-  // absensi/FK. "Hapus" di UI = nonaktifkan akun (PATCH isActive:false).
+  toggleActive: async (id: string) => {
+    const res = await api.patch<{ data: { id: string; isActive: boolean } }>(
+      `/users/${id}/toggle-active`
+    )
+    return res.data
+  },
+
   delete: async (id: string) => {
-    const res = await api.patch(`/users/${id}`, { isActive: false })
+    const res = await api.patch(`/users/${id}/toggle-active`)
     return res.data
   },
 
   deleteMany: async (ids: string[]) => {
     const res = await Promise.all(
-      ids.map((id) => api.patch(`/users/${id}`, { isActive: false }))
+      ids.map((id) => api.patch(`/users/${id}/toggle-active`))
     )
     return res.map((r) => r.data)
   },
