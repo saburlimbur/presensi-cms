@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedLeaveBalancesRouteImport } from './routes/_authenticated/leave-balances'
 import { Route as AuthenticatedAuditLogsRouteImport } from './routes/_authenticated/audit-logs'
 import { Route as errors503RouteImport } from './routes/(errors)/503'
 import { Route as errors500RouteImport } from './routes/(errors)/500'
@@ -56,6 +57,12 @@ const AuthenticatedNotificationsRoute =
   AuthenticatedNotificationsRouteImport.update({
     id: '/notifications',
     path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedLeaveBalancesRoute =
+  AuthenticatedLeaveBalancesRouteImport.update({
+    id: '/leave-balances',
+    path: '/leave-balances',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedAuditLogsRoute = AuthenticatedAuditLogsRouteImport.update({
@@ -238,6 +245,7 @@ export interface FileRoutesByFullPath {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/audit-logs': typeof AuthenticatedAuditLogsRoute
+  '/leave-balances': typeof AuthenticatedLeaveBalancesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/attendances/locations': typeof AuthenticatedAttendancesLocationsRoute
   '/attendances/reports': typeof AuthenticatedAttendancesReportsRoute
@@ -270,6 +278,7 @@ export interface FileRoutesByTo {
   '/500': typeof errors500Route
   '/503': typeof errors503Route
   '/audit-logs': typeof AuthenticatedAuditLogsRoute
+  '/leave-balances': typeof AuthenticatedLeaveBalancesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/': typeof AuthenticatedIndexRoute
   '/attendances/locations': typeof AuthenticatedAttendancesLocationsRoute
@@ -306,6 +315,7 @@ export interface FileRoutesById {
   '/(errors)/500': typeof errors500Route
   '/(errors)/503': typeof errors503Route
   '/_authenticated/audit-logs': typeof AuthenticatedAuditLogsRoute
+  '/_authenticated/leave-balances': typeof AuthenticatedLeaveBalancesRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/attendances/locations': typeof AuthenticatedAttendancesLocationsRoute
@@ -343,6 +353,7 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/audit-logs'
+    | '/leave-balances'
     | '/notifications'
     | '/attendances/locations'
     | '/attendances/reports'
@@ -375,6 +386,7 @@ export interface FileRouteTypes {
     | '/500'
     | '/503'
     | '/audit-logs'
+    | '/leave-balances'
     | '/notifications'
     | '/'
     | '/attendances/locations'
@@ -410,6 +422,7 @@ export interface FileRouteTypes {
     | '/(errors)/500'
     | '/(errors)/503'
     | '/_authenticated/audit-logs'
+    | '/_authenticated/leave-balances'
     | '/_authenticated/notifications'
     | '/_authenticated/'
     | '/_authenticated/attendances/locations'
@@ -467,6 +480,13 @@ declare module '@tanstack/react-router' {
       path: '/notifications'
       fullPath: '/notifications'
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/leave-balances': {
+      id: '/_authenticated/leave-balances'
+      path: '/leave-balances'
+      fullPath: '/leave-balances'
+      preLoaderRoute: typeof AuthenticatedLeaveBalancesRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/audit-logs': {
@@ -708,6 +728,7 @@ const AuthenticatedSettingsRouteRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedSettingsRouteRoute: typeof AuthenticatedSettingsRouteRouteWithChildren
   AuthenticatedAuditLogsRoute: typeof AuthenticatedAuditLogsRoute
+  AuthenticatedLeaveBalancesRoute: typeof AuthenticatedLeaveBalancesRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAttendancesLocationsRoute: typeof AuthenticatedAttendancesLocationsRoute
@@ -728,6 +749,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedSettingsRouteRoute: AuthenticatedSettingsRouteRouteWithChildren,
   AuthenticatedAuditLogsRoute: AuthenticatedAuditLogsRoute,
+  AuthenticatedLeaveBalancesRoute: AuthenticatedLeaveBalancesRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAttendancesLocationsRoute:

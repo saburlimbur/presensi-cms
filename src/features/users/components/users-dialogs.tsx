@@ -1,6 +1,7 @@
 import { EmployeeFormDialog } from '@/features/employees/components/employee-form-dialog'
 import { UsersDeleteDialog } from './users-delete-dialog'
 import { useUsers } from './users-provider'
+import { UsersResetPasswordDialog } from './users-reset-password-dialog'
 
 export function UsersDialogs() {
   const { open, setOpen, currentRow, setCurrentRow } = useUsers()
@@ -31,6 +32,18 @@ export function UsersDialogs() {
             open={open === 'delete'}
             onOpenChange={() => {
               setOpen('delete')
+              setTimeout(() => {
+                setCurrentRow(null)
+              }, 500)
+            }}
+            currentRow={currentRow}
+          />
+
+          <UsersResetPasswordDialog
+            key={`user-reset-${currentRow.id}`}
+            open={open === 'reset'}
+            onOpenChange={() => {
+              setOpen('reset')
               setTimeout(() => {
                 setCurrentRow(null)
               }, 500)

@@ -1,1 +1,6 @@
-// TODO: implement — createFileRoute('/_authenticated/leave-balances') ke @/features/leave-balances
+import { createFileRoute } from '@tanstack/react-router'
+import LeaveBalances from '@/features/leave-balances'
+
+export const Route = createFileRoute('/_authenticated/leave-balances')({
+  component: LeaveBalances,
+})
