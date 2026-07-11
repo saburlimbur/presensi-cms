@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
 import { NotificationDropdown } from '@/components/notification-dropdown'
@@ -23,6 +24,7 @@ import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { useAllUserAttendance } from '../hooks/use-all-user-attendance'
 import { MapRouteDistance } from './components/map-route'
+import { LocationsManagement } from './locations-management'
 
 // Skeleton untuk kolom kiri (detail card + list) saat fetch berjalan.
 function LocationsSidebarSkeleton() {
@@ -137,6 +139,13 @@ function Locations() {
         </div>
         <Separator className='my-4' />
 
+        <Tabs defaultValue='tracking' className='flex flex-1 flex-col gap-4'>
+          <TabsList>
+            <TabsTrigger value='tracking'>Live Tracking</TabsTrigger>
+            <TabsTrigger value='manage'>Manage Locations</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value='tracking' className='mt-0'>
         <div className='flex flex-col gap-4 lg:h-[calc(100vh-14rem)] lg:flex-row lg:overflow-hidden'>
           {/* Kiri: detail + list */}
           <div className='flex w-full flex-shrink-0 flex-col gap-4 pr-0 lg:w-96 lg:overflow-y-auto lg:pr-2'>
@@ -361,6 +370,12 @@ function Locations() {
             ) : null}
           </div>
         </div>
+          </TabsContent>
+
+          <TabsContent value='manage' className='mt-0'>
+            <LocationsManagement />
+          </TabsContent>
+        </Tabs>
       </Main>
     </>
   )

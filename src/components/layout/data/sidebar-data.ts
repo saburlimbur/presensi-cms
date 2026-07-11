@@ -10,6 +10,7 @@ import {
   Settings,
   Timer,
   Users,
+  Wallet,
   Command,
 } from 'lucide-react'
 import { type SidebarData } from '../types'
@@ -80,6 +81,11 @@ export const sidebarData: SidebarData = {
           title: 'Overtime',
           url: '/requests/overtime',
           icon: Timer,
+        },
+        {
+          title: 'Leave Balances',
+          url: '/leave-balances',
+          icon: Wallet,
         },
       ],
     },

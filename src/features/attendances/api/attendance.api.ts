@@ -30,4 +30,9 @@ export const attendancesApi = {
     )
     return response.data
   },
+
+  getUserAttendanceDetail: async (id: string) => {
+    const response = await ApiService.get(`/attendance/user-attendance/${id}`)
+    return response.data
+  },
 }

@@ -52,6 +52,7 @@ import { NotificationDropdown } from '@/components/notification-dropdown'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { EmployeeRecordsDialog } from '@/features/attendances/components/employee-records-dialog'
 import { useAllUserAttendanceToExcel } from '@/features/attendances/hooks/use-all-user-attendance-to-excel'
 import useGetAllDepartments from '@/features/departments/hooks/useGetAllDepartments'
 import { ReportsChart } from './components/reports-chart'
@@ -92,6 +93,12 @@ function Reports() {
 
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(10)
+
+  // Employee terpilih untuk melihat rincian record absensinya (dialog).
+  const [recordsFor, setRecordsFor] = useState<{
+    userId: string
+    name: string
+  } | null>(null)
 
   // ---- Queries ----
   const departmentsQuery = useGetAllDepartments()
@@ -463,7 +470,15 @@ function Reports() {
                   </TableCell>
                 </TableRow>
               ) : (
-                pageRows.map((row) => <DetailRow key={row.userId} row={row} />)
+                pageRows.map((row) => (
+                  <DetailRow
+                    key={row.userId}
+                    row={row}
+                    onOpen={() =>
+                      setRecordsFor({ userId: row.userId, name: row.fullName })
+                    }
+                  />
+                ))
               )}
             </TableBody>
           </Table>
@@ -532,6 +547,15 @@ function Reports() {
             </div>
           </div>
         </Card>
+
+        <EmployeeRecordsDialog
+          userId={recordsFor?.userId ?? null}
+          employeeName={recordsFor?.name}
+          dateFrom={exportRange.dateFrom}
+          dateTo={exportRange.dateTo}
+          open={!!recordsFor}
+          onOpenChange={(o) => !o && setRecordsFor(null)}
+        />
       </Main>
     </>
   )
@@ -589,7 +613,13 @@ function StatCard({
   )
 }
 
-function DetailRow({ row }: { row: EmployeeAttendanceDetail }) {
+function DetailRow({
+  row,
+  onOpen,
+}: {
+  row: EmployeeAttendanceDetail
+  onOpen: () => void
+}) {
   const initials = row.fullName
     .split(' ')
     .map((n) => n[0])
@@ -600,7 +630,11 @@ function DetailRow({ row }: { row: EmployeeAttendanceDetail }) {
   return (
     <TableRow>
       <TableCell className='pl-4'>
-        <div className='flex items-center gap-3'>
+        <button
+          type='button'
+          onClick={onOpen}
+          className='flex items-center gap-3 text-start transition-opacity hover:opacity-80'
+        >
           <div className='flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-semibold'>
             {initials}
           </div>
@@ -613,7 +647,7 @@ function DetailRow({ row }: { row: EmployeeAttendanceDetail }) {
               {row.position ? ` • ${row.position}` : ''}
             </span>
           </div>
-        </div>
+        </button>
       </TableCell>
       <CountCell value={row.present} tone='success' />
       <CountCell value={row.late} tone='warning' />

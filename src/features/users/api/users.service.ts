@@ -77,4 +77,21 @@ export const usersService = {
     )
     return res.map((r) => r.data)
   },
+
+  // Admin men-generate link reset password untuk karyawan. Backend TIDAK
+  // menerima password baru di sini — ia mengembalikan token reset yang harus
+  // diserahkan ke karyawan agar mereka mengatur password sendiri.
+  resetPassword: async (id: string) => {
+    const res = await api.patch<{
+      success: boolean
+      message: string
+      data: {
+        employeeId: string
+        email: string
+        token: string
+        expiresAt: string
+      }
+    }>(`/users/${id}/reset-password`)
+    return res.data.data
+  },
 }
