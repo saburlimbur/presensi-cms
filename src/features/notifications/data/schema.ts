@@ -75,7 +75,7 @@ export interface NotificationListResponse extends ApiEnvelope<Notification[]> {
     total: number
     page: number
     limit: number
-    totalPage: number
+    totalPages: number
   }
 }
 
