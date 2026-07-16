@@ -19,6 +19,7 @@ import { ReportsChart } from '../reports/components/reports-chart'
 import { MONTHS } from '../reports/components/reports-filter'
 import { useMonthlyReports } from '../reports/hooks/use-monthly-report'
 import { RecentAttendance } from './components/recent-attendance'
+import { TodaySummary } from './components/today-summary'
 
 export function Dashboard() {
   const now = new Date()
@@ -135,6 +136,9 @@ export function Dashboard() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Ringkasan hari ini — realtime dari summary endpoint */}
+        <TodaySummary />
 
         {/* Chart + Recent Attendance */}
         <div className='grid grid-cols-1 gap-4 lg:grid-cols-7'>
