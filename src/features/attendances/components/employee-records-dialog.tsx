@@ -1,7 +1,6 @@
-'use client'
-
 import { useState } from 'react'
 import { format } from 'date-fns'
+import { Plus } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -22,6 +21,7 @@ import {
 } from '@/components/ui/table'
 import { useAttendanceRecords } from '../hooks/use-attendance-records'
 import { AttendanceDetailDialog } from './attendance-detail-dialog'
+import { ManualAttendanceDialog } from './manual-attendance-dialog'
 
 type EmployeeRecordsDialogProps = {
   userId: string | null
@@ -49,14 +49,29 @@ export function EmployeeRecordsDialog({
   open,
   onOpenChange,
 }: EmployeeRecordsDialogProps) {
+  const [manualOpen, setManualOpen] = useState(false)
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='max-h-[85vh] overflow-y-auto sm:max-w-2xl'>
         <DialogHeader className='text-start'>
-          <DialogTitle>Riwayat Absensi</DialogTitle>
-          <DialogDescription>
-            {employeeName ?? 'Karyawan'} • {dateFrom} s/d {dateTo}
-          </DialogDescription>
+          <div className='flex items-start justify-between gap-4'>
+            <div>
+              <DialogTitle>Riwayat Absensi</DialogTitle>
+              <DialogDescription>
+                {employeeName ?? 'Karyawan'} • {dateFrom} s/d {dateTo}
+              </DialogDescription>
+            </div>
+            {userId && (
+              <Button
+                size='sm'
+                className='h-8 shrink-0'
+                onClick={() => setManualOpen(true)}
+              >
+                <Plus className='h-4 w-4' /> Absensi Manual
+              </Button>
+            )}
+          </div>
         </DialogHeader>
 
         {open && userId && (
@@ -64,6 +79,15 @@ export function EmployeeRecordsDialog({
             userId={userId}
             dateFrom={dateFrom}
             dateTo={dateTo}
+          />
+        )}
+
+        {userId && (
+          <ManualAttendanceDialog
+            userId={userId}
+            employeeName={employeeName}
+            open={manualOpen}
+            onOpenChange={setManualOpen}
           />
         )}
       </DialogContent>
