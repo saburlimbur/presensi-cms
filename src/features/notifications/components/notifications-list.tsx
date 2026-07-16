@@ -60,7 +60,7 @@ export function NotificationsList() {
   const navigate = useNavigate()
 
   const items = data?.data ?? []
-  const totalPage = data?.pagination?.totalPage ?? 1
+  const totalPages = data?.pagination?.totalPages ?? 1
 
   const onItemClick = (n: Notification) => {
     if (!n.readAt) markRead.mutate(n.id)
@@ -156,10 +156,10 @@ export function NotificationsList() {
       </Card>
 
       {/* Pagination */}
-      {items.length > 0 && totalPage > 1 && (
+      {items.length > 0 && totalPages > 1 && (
         <div className='flex items-center justify-end gap-2'>
           <span className='text-xs text-muted-foreground'>
-            Halaman {page} dari {totalPage}
+            Halaman {page} dari {totalPages}
             {isFetching && ' · memuat…'}
           </span>
           <Button
@@ -173,8 +173,8 @@ export function NotificationsList() {
           <Button
             variant='outline'
             size='icon'
-            disabled={page >= totalPage || isFetching}
-            onClick={() => setPage((p) => Math.min(totalPage, p + 1))}
+            disabled={page >= totalPages || isFetching}
+            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
           >
             <ChevronRight className='h-4 w-4' />
           </Button>

@@ -1,0 +1,63 @@
+import { AlertTriangle } from 'lucide-react'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { ConfirmDialog } from '@/components/confirm-dialog'
+import { type Department } from './departments-columns'
+import useDeleteDepartment from '../hooks/use-delete-department'
+
+type DepartmentDeleteDialogProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  currentRow: Department
+}
+
+export function DepartmentDeleteDialog({
+  open,
+  onOpenChange,
+  currentRow,
+}: DepartmentDeleteDialogProps) {
+  const deleteDepartment = useDeleteDepartment()
+  const employeeCount = currentRow._count?.employees ?? 0
+
+  const handleDelete = () => {
+    deleteDepartment.mutate(currentRow.id, {
+      onSuccess: () => onOpenChange(false),
+    })
+  }
+
+  return (
+    <ConfirmDialog
+      open={open}
+      onOpenChange={onOpenChange}
+      handleConfirm={handleDelete}
+      disabled={deleteDepartment.isPending}
+      title={
+        <span className='text-destructive'>
+          <AlertTriangle
+            className='me-1 inline-block stroke-destructive'
+            size={18}
+          />{' '}
+          Delete Department
+        </span>
+      }
+      desc={
+        <div className='space-y-4'>
+          <p className='mb-2'>
+            Are you sure you want to delete department{' '}
+            <span className='font-bold'>{currentRow.name}</span> (
+            {currentRow.code})? This cannot be undone.
+          </p>
+          <Alert variant='destructive'>
+            <AlertTitle>Warning!</AlertTitle>
+            <AlertDescription>
+              {employeeCount > 0
+                ? `Departemen ini masih memiliki ${employeeCount} karyawan. Pindahkan karyawan terlebih dahulu — penghapusan akan ditolak server jika masih terkait.`
+                : 'Penghapusan departemen bersifat permanen.'}
+            </AlertDescription>
+          </Alert>
+        </div>
+      }
+      confirmText={deleteDepartment.isPending ? 'Deleting...' : 'Delete'}
+      destructive
+    />
+  )
+}

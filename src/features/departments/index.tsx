@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react'
-import { Building2, LayoutGrid, User, Users } from 'lucide-react'
+import { Building2, LayoutGrid, Pencil, Plus, Trash2, User, Users } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Header } from '@/components/layout/header'
@@ -12,10 +13,25 @@ import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
 import { DepartmentEmployeesTable } from './components/department-employees-table'
 import { type Department } from './components/departments-columns'
+import { DepartmentsDialogs } from './components/departments-dialogs'
+import {
+  DepartmentsProvider,
+  useDepartments,
+} from './components/departments-provider'
 import useGetAllDepartments from './hooks/useGetAllDepartments'
 
 function Departments() {
+  return (
+    <DepartmentsProvider>
+      <DepartmentsContent />
+      <DepartmentsDialogs />
+    </DepartmentsProvider>
+  )
+}
+
+function DepartmentsContent() {
   const { data: departments, isLoading } = useGetAllDepartments()
+  const { setOpen, setCurrentRow } = useDepartments()
   const [selectedId, setSelectedId] = useState<string>('all')
 
   const totalEmployees =
@@ -46,11 +62,21 @@ function Departments() {
       </Header>
 
       <Main className='flex flex-1 flex-col gap-4 sm:gap-6'>
-        <div>
-          <h2 className='text-2xl font-bold tracking-tight'>Departments</h2>
-          <p className='text-muted-foreground'>
-            Manage departments in your organization.
-          </p>
+        <div className='flex items-start justify-between gap-4'>
+          <div>
+            <h2 className='text-2xl font-bold tracking-tight'>Departments</h2>
+            <p className='text-muted-foreground'>
+              Manage departments in your organization.
+            </p>
+          </div>
+          <Button
+            onClick={() => {
+              setCurrentRow(null)
+              setOpen('add')
+            }}
+          >
+            <Plus className='h-4 w-4' /> Add Department
+          </Button>
         </div>
 
         {/* Summary Cards (Total Stats) */}
@@ -170,11 +196,39 @@ function Departments() {
                   <Card
                     key={dept.id}
                     className={cn(
-                      'cursor-pointer gap-3 py-3 transition-all hover:shadow-sm',
+                      'group relative cursor-pointer gap-3 py-3 transition-all hover:shadow-sm',
                       isSelected && 'bg-primary/5'
                     )}
                     onClick={() => setSelectedId(dept.id)}
                   >
+                    <div className='absolute end-2 top-2 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100'>
+                      <Button
+                        variant='ghost'
+                        size='icon'
+                        className='h-6 w-6'
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setCurrentRow(dept)
+                          setOpen('edit')
+                        }}
+                      >
+                        <Pencil size={12} />
+                        <span className='sr-only'>Edit</span>
+                      </Button>
+                      <Button
+                        variant='ghost'
+                        size='icon'
+                        className='h-6 w-6 text-destructive hover:text-destructive'
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setCurrentRow(dept)
+                          setOpen('delete')
+                        }}
+                      >
+                        <Trash2 size={12} />
+                        <span className='sr-only'>Delete</span>
+                      </Button>
+                    </div>
                     <CardHeader className='pb-0'>
                       <div className='flex items-center gap-3'>
                         <div

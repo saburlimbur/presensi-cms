@@ -43,55 +43,6 @@ const ACTION_OPTIONS = [
   })),
 ]
 
-// Fallback dummy untuk tampilan awal saat backend belum punya log.
-// Hilang otomatis begitu DB punya row real.
-const DUMMY_LOGS: AuditLog[] = [
-  {
-    id: 'dummy-1',
-    userId: 'dummy-admin',
-    action: 'permission.approved',
-    details:
-      '[dummy] approved permission abc-123 — note: ok dilampirkan surat dokter',
-    createdAt: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-    user: {
-      id: 'dummy-admin',
-      fullName: 'Ane Admin',
-      employeeId: 'ADM-001',
-      email: 'mimin@gmail.com',
-      role: 'ADMIN',
-    },
-  },
-  {
-    id: 'dummy-2',
-    userId: 'dummy-admin',
-    action: 'attendance.manual_created',
-    details:
-      '[dummy] manual attendance for user EMP-007 on 2026-05-21 — status: PRESENT',
-    createdAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-    user: {
-      id: 'dummy-admin',
-      fullName: 'Ane Admin',
-      employeeId: 'ADM-001',
-      email: 'mimin@gmail.com',
-      role: 'ADMIN',
-    },
-  },
-  {
-    id: 'dummy-3',
-    userId: 'dummy-admin',
-    action: 'user.toggled_active',
-    details: '[dummy] disabled user EMP-012 (test@example.com)',
-    createdAt: new Date().toISOString(),
-    user: {
-      id: 'dummy-admin',
-      fullName: 'Ane Admin',
-      employeeId: 'ADM-001',
-      email: 'mimin@gmail.com',
-      role: 'ADMIN',
-    },
-  },
-]
-
 export function AuditLogsList() {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
@@ -105,15 +56,9 @@ export function AuditLogsList() {
 
   const { data, isLoading, isFetching } = useGetAuditLogs(params)
 
-  // Fallback ke dummy hanya saat backend benar-benar kosong (initial state)
-  // dan tidak ada filter aktif — biar tidak menyesatkan saat user filter
-  // dan hasilnya memang 0.
-  const apiItems = data?.data ?? []
-  const useDummy =
-    !isLoading && apiItems.length === 0 && action === 'all' && page === 1
-  const items = useDummy ? DUMMY_LOGS : apiItems
-  const total = useDummy ? DUMMY_LOGS.length : (data?.pagination?.total ?? 0)
-  const totalPage = useDummy ? 1 : (data?.pagination?.totalPage ?? 1)
+  const items = data?.data ?? []
+  const total = data?.pagination?.total ?? 0
+  const totalPages = data?.pagination?.totalPages ?? 1
 
   return (
     <div className='flex flex-col gap-4'>
@@ -222,7 +167,7 @@ export function AuditLogsList() {
             <span>
               Page{' '}
               <span className='font-semibold text-foreground'>{page}</span> of{' '}
-              {totalPage}
+              {totalPages}
             </span>
             <Button
               variant='outline'
@@ -237,7 +182,7 @@ export function AuditLogsList() {
               variant='outline'
               size='icon'
               className='h-7 w-7'
-              disabled={page >= totalPage || isFetching}
+              disabled={page >= totalPages || isFetching}
               onClick={() => setPage((p) => p + 1)}
             >
               <ChevronRight size={14} />

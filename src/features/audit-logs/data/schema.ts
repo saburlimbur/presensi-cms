@@ -75,6 +75,6 @@ export interface AuditLogListResponse {
     total: number
     page: number
     limit: number
-    totalPage: number
+    totalPages: number
   }
 }

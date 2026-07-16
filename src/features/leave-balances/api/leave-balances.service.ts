@@ -9,7 +9,7 @@ type Pagination = {
   total: number
   page: number
   limit: number
-  totalPage: number
+  totalPages: number
 }
 
 export const leaveBalancesService = {

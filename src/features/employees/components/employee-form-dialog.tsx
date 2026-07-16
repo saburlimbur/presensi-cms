@@ -2,7 +2,6 @@
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -34,6 +33,7 @@ import {
   type EmployeeFormValues,
 } from '../data/schema'
 import useCreateEmployee from '../hooks/use-create-employee'
+import useUpdateEmployee from '../hooks/use-update-employee'
 
 type EmployeeFormDialogProps = {
   currentRow?: User
@@ -54,6 +54,8 @@ export function EmployeeFormDialog({
   // API call + toast + cache invalidation di-handle hook; komponen tinggal
   // pass extra `onSuccess` untuk UI-side (reset form, close dialog).
   const createEmployee = useCreateEmployee()
+  const updateEmployee = useUpdateEmployee()
+  const isPending = createEmployee.isPending || updateEmployee.isPending
 
   const form = useForm<EmployeeFormValues>({
     resolver: zodResolver(employeeFormSchema),
@@ -81,12 +83,26 @@ export function EmployeeFormDialog({
   })
 
   const onSubmit = (values: EmployeeFormValues) => {
-    if (isEdit) {
-      // TODO: backend belum punya endpoint PUT /users/:id untuk full update.
-      // Sementara hanya close dialog. Update profile self-only via
-      // PATCH /users/profile sudah tersedia di userService.
-      toast.info('Edit employee belum tersedia di backend.')
-      onOpenChange(false)
+    if (isEdit && currentRow) {
+      // password sengaja tidak diikutkan — ganti password lewat menu reset khusus
+      updateEmployee.mutate(
+        {
+          id: currentRow.id,
+          payload: {
+            fullName: values.fullName,
+            email: values.email,
+            phone: values.phone,
+            departmentCode: values.departmentCode,
+            position: values.position,
+          },
+        },
+        {
+          onSuccess: () => {
+            form.reset()
+            onOpenChange(false)
+          },
+        }
+      )
       return
     }
 
@@ -289,12 +305,8 @@ export function EmployeeFormDialog({
           </Form>
         </div>
         <DialogFooter>
-          <Button
-            type='submit'
-            form='employee-form'
-            disabled={createEmployee.isPending}
-          >
-            {createEmployee.isPending
+          <Button type='submit' form='employee-form' disabled={isPending}>
+            {isPending
               ? 'Saving...'
               : isEdit
                 ? 'Save changes'
