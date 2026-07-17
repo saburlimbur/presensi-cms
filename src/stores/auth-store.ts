@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { getCookie, setCookie, removeCookie } from '@/lib/cookies'
 
 const ACCESS_TOKEN = import.meta.env.VITE_TOKEN_KEY
+const REFRESH_TOKEN = import.meta.env.VITE_REFRESH_TOKEN_KEY
 
 interface AuthUser {
   accountNo: string
@@ -16,6 +17,7 @@ interface AuthState {
     setUser: (user: AuthUser | null) => void
     accessToken: string
     setAccessToken: (accessToken: string) => void
+    setRefreshToken: (refreshToken: string) => void
     resetAccessToken: () => void
     reset: () => void
   }
@@ -49,6 +51,7 @@ export const useAuthStore = create<AuthState>()((set) => {
             },
           }
         }),
+      setRefreshToken: (refreshToken) => setCookie(REFRESH_TOKEN, refreshToken),
       resetAccessToken: () =>
         set((state) => {
           removeCookie(ACCESS_TOKEN)
@@ -63,6 +66,7 @@ export const useAuthStore = create<AuthState>()((set) => {
       reset: () =>
         set((state) => {
           removeCookie(ACCESS_TOKEN)
+          removeCookie(REFRESH_TOKEN)
           return {
             ...state,
             auth: {

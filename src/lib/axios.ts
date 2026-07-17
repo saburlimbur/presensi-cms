@@ -1,13 +1,13 @@
 import axios from 'axios'
-import { getCookie, removeCookie } from './cookies'
+import { getCookie, setCookie, removeCookie } from './cookies'
 
 const ACCESS_TOKEN_KEY = import.meta.env.VITE_TOKEN_KEY
 const REFRESH_TOKEN_KEY = import.meta.env.VITE_REFRESH_TOKEN_KEY
 
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
-// Fallback tunnel (ngrok) — dipakai otomatis kalau request ke API utama gagal
-// karena jaringan (mis. server localhost tak terjangkau). Kosongkan kalau tidak
-// pakai tunnel.
+// kalau request ke api utama gagal gara-gara jaringan (mis. localhost lagi
+// nggak kejangkau), otomatis dicoba ulang lewat tunnel ini. kosongin aja
+// kalau nggak pakai tunnel.
 export const API_BASE_URL_FALLBACK =
   import.meta.env.VITE_API_BASE_URL_FALLBACK ?? ''
 
@@ -15,8 +15,8 @@ const ApiService = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
-    // ngrok free menyisipkan halaman warning HTML sebelum response; header ini
-    // (nilai bebas) membuat ngrok melewatinya → response tetap JSON.
+    // ngrok free suka nyelipin halaman warning html sebelum response. header
+    // ini bikin dia nge-skip itu, jadi yang balik tetap json. nilainya bebas.
     'ngrok-skip-browser-warning': 'true',
   },
 })
@@ -34,8 +34,8 @@ ApiService.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    // FALLBACK TUNNEL: network error (tidak ada response) & punya URL fallback &
-    // belum pernah di-fallback → retry sekali lewat base URL tunnel (ngrok).
+    // gagal total tanpa response, dan belum pernah dicoba lewat tunnel?
+    // ulangi sekali pakai base url fallback.
     if (
       !error.response &&
       API_BASE_URL_FALLBACK &&
@@ -48,7 +48,7 @@ ApiService.interceptors.response.use(
       return ApiService(originalRequest)
     }
 
-    // Cegah loop refresh jika request aslinya adalah login
+    // login yang gagal jangan ikut di-refresh, nanti muter-muter
     if (originalRequest.url?.includes('/users/login')) {
       return Promise.reject(error)
     }
@@ -64,21 +64,17 @@ ApiService.interceptors.response.use(
       }
 
       try {
-        // Gunakan axios standar untuk refresh agar tidak terkena interceptor ini lagi
+        // pakai axios polos biar nggak kena interceptor ini lagi
         const { data } = await axios.post(
-          // `${import.meta.env.VITE_API_BASE_URL}/users/refresh-token`,
-          `${import.meta.env.VITE_API_BASE_URL}/users/login`,
-          {
-            refreshToken,
-          }
+          `${originalRequest.baseURL ?? API_BASE_URL}/users/refresh-token`,
+          { refreshToken },
+          { headers: { 'ngrok-skip-browser-warning': 'true' } }
         )
 
-        // Simpan token baru ke cookie (pakai utilitas Anda)
-        // Pastikan nama key sesuai: ACCESS_TOKEN_KEY
-        document.cookie = `${ACCESS_TOKEN_KEY}=${data.accessToken}; path=/; max-age=${60 * 60 * 24 * 7}`
+        const accessToken = data.data.accessToken
+        setCookie(ACCESS_TOKEN_KEY, accessToken)
 
-        // Ulangi request awal
-        originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`
         return axios(originalRequest)
       } catch (refreshError) {
         handleLogout()
