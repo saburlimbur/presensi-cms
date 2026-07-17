@@ -1,119 +1,72 @@
-# Shadcn Admin Dashboard
+# Absensi — CMS Admin
 
-Admin Dashboard UI crafted with Shadcn and Vite. Built with responsiveness and accessibility in mind.
+Dashboard admin untuk sistem absensi berbasis face recognition dan geofencing. Dipakai HR/admin untuk mengelola karyawan, memantau kehadiran, dan memproses pengajuan izin.
 
-![alt text](public/images/shadcn-admin.png)
+Backend-nya ada di [`absensi-server`](../absensi-server) — dashboard ini tidak jalan tanpa itu. Aplikasi sisi karyawan ada di [`absensi-client`](../absensi-client).
 
-[![Sponsored by Clerk](https://img.shields.io/badge/Sponsored%20by-Clerk-5b6ee1?logo=clerk)](https://go.clerk.com/GttUAaK)
+## Fitur
 
-I've been creating dashboard UIs at work and for my personal projects. I always wanted to make a reusable collection of dashboard UI for future projects; and here it is now. While I've created a few custom components, some of the code is directly adapted from ShadcnUI examples.
+| Fitur | Isi |
+| :-- | :-- |
+| **Karyawan** | CRUD karyawan, aktif/nonaktif akun, reset password. |
+| **Departemen** | Master departemen beserta kepala departemen. |
+| **Absensi** | Pantau kehadiran harian, detail check-in/out lengkap dengan foto & titik GPS. |
+| **Pengajuan izin** | Approve/reject izin, lihat lampiran, catatan keputusan. |
+| **Saldo cuti** | Kuota tahunan, terpakai, dan sisa per karyawan. |
+| **Laporan** | Rekap absensi, ekspor Excel. |
+| **Audit log** | Jejak aksi admin. |
+| **Notifikasi** | Realtime lewat SSE. |
 
-> This is not a starter project (template) though. I'll probably make one in the future.
+## Stack
 
-## Features
+| Kategori | Teknologi |
+| :-- | :-- |
+| Framework | React 19 + TypeScript, Vite |
+| Routing | TanStack Router (file-based) |
+| Server state | TanStack Query |
+| Tabel | TanStack Table |
+| Client state | Zustand |
+| HTTP | Axios (interceptor auto-refresh token + fallback tunnel) |
+| UI | shadcn/ui + Tailwind CSS |
+| Chart | Recharts |
+| Validasi | Zod |
 
-- Light/dark mode
-- Responsive
-- Accessible
-- With built-in Sidebar component
-- Global search command
-- 10+ pages
-- Extra custom components
-- RTL support
-
-<details>
-<summary>Customized Components (click to expand)</summary>
-
-This project uses Shadcn UI components, but some have been slightly modified for better RTL (Right-to-Left) support and other improvements. These customized components differ from the original Shadcn UI versions.
-
-If you want to update components using the Shadcn CLI (e.g., `npx shadcn@latest add <component>`), it's generally safe for non-customized components. For the listed customized ones, you may need to manually merge changes to preserve the project's modifications and avoid overwriting RTL support or other updates.
-
-> If you don't require RTL support, you can safely update the 'RTL Updated Components' via the Shadcn CLI, as these changes are primarily for RTL compatibility. The 'Modified Components' may have other customizations to consider.
-
-### Modified Components
-
-- scroll-area
-- sonner
-- separator
-
-### RTL Updated Components
-
-- alert-dialog
-- calendar
-- command
-- dialog
-- dropdown-menu
-- select
-- table
-- sheet
-- sidebar
-- switch
-
-**Notes:**
-
-- **Modified Components**: These have general updates, potentially including RTL adjustments.
-- **RTL Updated Components**: These have specific changes for RTL language support (e.g., layout, positioning).
-- For implementation details, check the source files in `src/components/ui/`.
-- All other Shadcn UI components in the project are standard and can be safely updated via the CLI.
-
-</details>
-
-## Tech Stack
-
-**UI:** [ShadcnUI](https://ui.shadcn.com) (TailwindCSS + RadixUI)
-
-**Build Tool:** [Vite](https://vitejs.dev/)
-
-**Routing:** [TanStack Router](https://tanstack.com/router/latest)
-
-**Type Checking:** [TypeScript](https://www.typescriptlang.org/)
-
-**Linting/Formatting:** [ESLint](https://eslint.org/) & [Prettier](https://prettier.io/)
-
-**Icons:** [Lucide Icons](https://lucide.dev/icons/), [Tabler Icons](https://tabler.io/icons) (Brand icons only)
-
-**Auth (partial):** [Clerk](https://go.clerk.com/GttUAaK)
-
-## Run Locally
-
-Clone the project
+## Menjalankan
 
 ```bash
-  git clone https://github.com/satnaing/shadcn-admin.git
+npm install
+cp .env.example .env.local   # isi VITE_API_BASE_URL
+npm run dev
 ```
 
-Go to the project directory
+| Script | Fungsi |
+| :-- | :-- |
+| `npm run dev` | Dev server + HMR |
+| `npm run build` | Build production ke `dist/` |
+| `npm run lint` | ESLint |
+| `npm run format:check` | Cek format Prettier |
+| `npm run format` | Rapikan format |
+| `npm run knip` | Cari file & dependency yang tidak terpakai |
 
-```bash
-  cd shadcn-admin
-```
+## Environment
 
-Install dependencies
+| Variable | Fungsi |
+| :-- | :-- |
+| `VITE_API_BASE_URL` | Base URL API backend, mis. `http://localhost:3000/attendance_api` |
+| `VITE_API_BASE_URL_FALLBACK` | Dipakai otomatis kalau base URL utama tidak terjangkau (mis. lewat tunnel ngrok). Kosongkan kalau tidak perlu. |
+| `VITE_TOKEN_KEY` | Nama key access token di storage. |
+| `VITE_REFRESH_TOKEN_KEY` | Nama key refresh token di storage. |
 
-```bash
-  pnpm install
-```
+## Catatan
 
-Start the server
+Lampiran izin disimpan di Supabase Storage sebagai key privat. Server mengirim *signed URL* ber-TTL di field `attachmentUrl_url` — **pakai itu untuk `href`**, bukan `attachmentUrl` yang isinya cuma key.
 
-```bash
-  pnpm run dev
-```
+Deploy lewat Vercel (`vercel.json`); push ke branch = deploy otomatis. Server harus di-deploy lebih dulu kalau ada perubahan field API.
 
-## Sponsoring this project ❤️
+## Sisa template
 
-If you find this project helpful or use this in your own work, consider [sponsoring me](https://github.com/sponsors/satnaing) to support development and maintenance. You can [buy me a coffee](https://buymeacoffee.com/satnaing) as well. Don’t worry, every penny helps. Thank you! 🙏
+Dashboard ini dibangun di atas [shadcn-admin](https://github.com/satnaing/shadcn-admin) karya [@satnaing](https://github.com/satnaing) (MIT). Beberapa bagian template masih ada dan **belum dipakai**: feature `apps`, `chats`, `tasks`, `dashboard`, `settings`, plus dependency `@clerk/clerk-react` (auth dashboard ini pakai JWT sendiri, bukan Clerk). Aman dihapus kalau mau bersih-bersih — `npm run knip` bisa bantu memetakannya.
 
-For questions or sponsorship inquiries, feel free to reach out at [satnaingdev@gmail.com](mailto:satnaingdev@gmail.com).
+## Lisensi
 
-### Current Sponsor
-
-- [Clerk](https://go.clerk.com/GttUAaK) - authentication and user management for the modern web
-
-## Author
-
-Crafted with 🤍 by [@satnaing](https://github.com/satnaing)
-
-## License
-
-Licensed under the [MIT License](https://choosealicense.com/licenses/mit/)
+MIT — mengikuti lisensi template asalnya.
