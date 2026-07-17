@@ -65,11 +65,10 @@ export function UserAuthForm({
         success: (response) => {
           setIsLoading(false)
 
-          // console.log('[login] raw response.data =', response.data)
-
-          const { accessToken, user } = response.data.data
+          const { accessToken, refreshToken, user } = response.data.data
 
           auth.setAccessToken(accessToken)
+          auth.setRefreshToken(refreshToken)
           auth.setUser(user)
 
           const targetPath = redirectTo || '/'

@@ -59,7 +59,10 @@ export const permissionSchema = z.object({
   reason: z.string().nullable().optional(),
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
+  // key storage, bukan url — jangan dipakai buat href
   attachmentUrl: z.string().nullable().optional(),
+  // signed url dari server, ini yang dipakai
+  attachmentUrl_url: z.string().nullable().optional(),
   status: permissionStatusEnum,
   // Note keputusan admin (alasan approve/reject) — kolom `approvedNote` di DB.
   approvedNote: z.string().nullable().optional(),
