@@ -1,6 +1,5 @@
 import { format } from 'date-fns'
 import { ArrowUpRight, FileText } from 'lucide-react'
-import { getAssetUrl } from '@/lib/assets'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
@@ -67,9 +66,9 @@ export function PermissionsTable({ data }: { data: Permission[] }) {
                   <span className='line-clamp-1'>{row.reason}</span>
                 </TableCell>
                 <TableCell>
-                  {row.attachmentUrl ? (
+                  {row.attachmentUrl_url ? (
                     <a
-                      href={getAssetUrl(row.attachmentUrl)}
+                      href={row.attachmentUrl_url}
                       target='_blank'
                       rel='noreferrer'
                       className={cn(
