@@ -40,6 +40,8 @@ const _userSchema = z.object({
   joinDate: z.coerce.date().nullable(),
   isActive: z.boolean(),
   isFaceRegistered: z.boolean(),
+  // signed URL dari Supabase (TTL 1 jam). null kalau belum ada foto / gagal sign.
+  profilePhoto_url: z.string().nullable().optional(),
   createdAt: z.coerce.date(),
 })
 export type User = z.infer<typeof _userSchema>
