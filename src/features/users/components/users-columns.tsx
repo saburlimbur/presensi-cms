@@ -67,10 +67,20 @@ export const usersColumns: ColumnDef<User>[] = [
         .slice(0, 2)
         .toUpperCase()
 
+      const photoUrl = row.original.profilePhoto_url
+
       return (
         <div className='flex items-center gap-3'>
-          <div className='flex h-8 w-8 items-center justify-center rounded-full bg-muted text-xs font-semibold'>
-            {initials}
+          <div className='flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-muted text-xs font-semibold'>
+            {photoUrl ? (
+              <img
+                src={photoUrl}
+                alt={fullName}
+                className='h-full w-full object-cover'
+              />
+            ) : (
+              initials
+            )}
           </div>
 
           <div className='flex flex-col gap-1'>
