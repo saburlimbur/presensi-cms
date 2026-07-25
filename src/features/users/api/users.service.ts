@@ -49,6 +49,13 @@ export const usersService = {
     return res.data.data
   },
 
+  // Update profil sendiri (admin yang login). Backend hanya menerima
+  // fullName & phone (updateProfileSchema).
+  updateProfile: async (payload: { fullName: string; phone: string }) => {
+    const res = await api.patch('/users/profile', payload)
+    return res.data
+  },
+
   create: async (payload: UserCreatePayload) => {
     const res = await api.post<User>('/users', payload)
     return res.data
