@@ -6,7 +6,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { useDeleteUser } from '../api/users.queries'
+import { useDeactivateEmployees } from '@/features/employees/hooks/use-deactivate-employees'
 import { type User } from '../data/schema'
 
 type UserDeleteDialogProps = {
@@ -21,12 +21,12 @@ export function UsersDeleteDialog({
   currentRow,
 }: UserDeleteDialogProps) {
   const [value, setValue] = useState('')
-  const deleteUser = useDeleteUser()
+  const { deactivateEmployees, isPending } = useDeactivateEmployees()
 
   const handleDelete = () => {
     if (value.trim() !== currentRow.employeeId) return
 
-    deleteUser.mutate(currentRow.id, {
+    deactivateEmployees([currentRow.id], {
       onSuccess: () => onOpenChange(false),
     })
   }
@@ -36,9 +36,7 @@ export function UsersDeleteDialog({
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={
-        value.trim() !== currentRow.employeeId || deleteUser.isPending
-      }
+      disabled={value.trim() !== currentRow.employeeId || isPending}
       title={
         <span className='text-destructive'>
           <AlertTriangle
@@ -77,7 +75,7 @@ export function UsersDeleteDialog({
           </Alert>
         </div>
       }
-      confirmText={deleteUser.isPending ? 'Deactivating...' : 'Deactivate'}
+      confirmText={isPending ? 'Deactivating...' : 'Deactivate'}
       destructive
     />
   )

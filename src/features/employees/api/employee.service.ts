@@ -1,5 +1,5 @@
 import ApiService from '@/lib/axios'
-import { User } from '@/features/users/data/schema'
+import { type User } from '@/features/users/data/schema'
 
 export interface ApiResponse<T> {
   success: boolean
@@ -39,7 +39,9 @@ export interface UserUpdatePayload {
 export const employeeService = {
   getAll: async (params?: Record<string, unknown>) => {
     const res = await ApiService.get<ApiResponse<User[]>>('/users', {
+      // tabel paginate di browser; 100 = batas limit di server
       params: {
+        limit: 100,
         ...params,
         role: 'EMPLOYEE',
       },
@@ -64,12 +66,7 @@ export const employeeService = {
 
   // Backend sengaja tidak meng-hard-delete user demi menjaga histori
   // absensi/FK. "Hapus" = nonaktifkan akun (PATCH isActive:false).
-  delete: async (id: string) => {
-    const res = await ApiService.patch(`/users/${id}`, { isActive: false })
-    return res.data
-  },
-
-  deleteMany: async (ids: string[]) => {
+  deactivateMany: async (ids: string[]) => {
     const res = await Promise.all(
       ids.map((id) => ApiService.patch(`/users/${id}`, { isActive: false }))
     )

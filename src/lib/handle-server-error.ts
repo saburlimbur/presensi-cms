@@ -1,24 +1,13 @@
 import { AxiosError } from 'axios'
 import { toast } from 'sonner'
 
-export function handleServerError(error: unknown) {
-  // eslint-disable-next-line no-console
-  console.log(error)
-
-  let errMsg = 'Something went wrong!'
-
-  if (
-    error &&
-    typeof error === 'object' &&
-    'status' in error &&
-    Number(error.status) === 204
-  ) {
-    errMsg = 'Content not found.'
-  }
-
+export function getErrorMessage(error: unknown, fallback: string) {
   if (error instanceof AxiosError) {
-    errMsg = error.response?.data.title
+    return error.response?.data?.message ?? error.message ?? fallback
   }
+  return error instanceof Error ? error.message : fallback
+}
 
-  toast.error(errMsg)
+export function handleServerError(error: unknown) {
+  toast.error(getErrorMessage(error, 'Something went wrong!'))
 }

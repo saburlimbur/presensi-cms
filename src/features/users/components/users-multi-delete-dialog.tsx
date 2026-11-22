@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { useDeleteManyUsers } from '../api/users.queries'
+import { useDeactivateEmployees } from '@/features/employees/hooks/use-deactivate-employees'
 
 type UserMultiDeleteDialogProps<TData> = {
   open: boolean
@@ -24,7 +24,7 @@ export function UsersMultiDeleteDialog<TData>({
   table,
 }: UserMultiDeleteDialogProps<TData>) {
   const [value, setValue] = useState('')
-  const deleteManyUsers = useDeleteManyUsers()
+  const { deactivateEmployees, isPending } = useDeactivateEmployees()
 
   const selectedRows = table.getFilteredSelectedRowModel().rows
 
@@ -36,7 +36,7 @@ export function UsersMultiDeleteDialog<TData>({
 
     const ids = selectedRows.map((row) => (row.original as { id: string }).id)
 
-    deleteManyUsers.mutate(ids, {
+    deactivateEmployees(ids, {
       onSuccess: () => {
         setValue('')
         table.resetRowSelection()
@@ -50,7 +50,7 @@ export function UsersMultiDeleteDialog<TData>({
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={value.trim() !== CONFIRM_WORD || deleteManyUsers.isPending}
+      disabled={value.trim() !== CONFIRM_WORD || isPending}
       title={
         <span className='text-destructive'>
           <AlertTriangle
@@ -86,7 +86,7 @@ export function UsersMultiDeleteDialog<TData>({
           </Alert>
         </div>
       }
-      confirmText={deleteManyUsers.isPending ? 'Deactivating...' : 'Deactivate'}
+      confirmText={isPending ? 'Deactivating...' : 'Deactivate'}
       destructive
     />
   )

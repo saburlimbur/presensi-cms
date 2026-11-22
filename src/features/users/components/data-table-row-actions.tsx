@@ -1,6 +1,6 @@
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { type Row } from '@tanstack/react-table'
-import { UserX, UserPen, KeyRound } from 'lucide-react'
+import { UserCheck, UserX, UserPen, KeyRound } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -10,6 +10,7 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import useUpdateEmployee from '@/features/employees/hooks/use-update-employee'
 import { type User } from '../data/schema'
 import { useUsers } from './users-provider'
 
@@ -19,6 +20,7 @@ type DataTableRowActionsProps = {
 
 export function DataTableRowActions({ row }: DataTableRowActionsProps) {
   const { setOpen, setCurrentRow } = useUsers()
+  const updateEmployee = useUpdateEmployee()
   return (
     <>
       <DropdownMenu modal={false}>
@@ -55,18 +57,34 @@ export function DataTableRowActions({ row }: DataTableRowActionsProps) {
             </DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              setCurrentRow(row.original)
-              setOpen('delete')
-            }}
-            className='text-red-500!'
-          >
-            Deactivate
-            <DropdownMenuShortcut>
-              <UserX size={16} />
-            </DropdownMenuShortcut>
-          </DropdownMenuItem>
+          {row.original.isActive ? (
+            <DropdownMenuItem
+              onClick={() => {
+                setCurrentRow(row.original)
+                setOpen('delete')
+              }}
+              className='text-red-500!'
+            >
+              Deactivate
+              <DropdownMenuShortcut>
+                <UserX size={16} />
+              </DropdownMenuShortcut>
+            </DropdownMenuItem>
+          ) : (
+            <DropdownMenuItem
+              onClick={() =>
+                updateEmployee.mutate({
+                  id: row.original.id,
+                  payload: { isActive: true },
+                })
+              }
+            >
+              Activate
+              <DropdownMenuShortcut>
+                <UserCheck size={16} />
+              </DropdownMenuShortcut>
+            </DropdownMenuItem>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { employeeService } from '../api/employee.service'
 
-export default function useGetEmployee(params?: any) {
+export default function useGetEmployee(params?: Record<string, unknown>) {
   const { data: employees, isLoading } = useQuery({
     queryKey: ['employees', params],
 

@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/handle-server-error'
 import {
   employeeService,
   type UserCreatePayload,
@@ -27,12 +28,7 @@ export default function useCreateEmployee() {
       toast.success('Employee created successfully')
       queryClient.invalidateQueries({ queryKey: ['employees'] })
     },
-    onError: (err: any) => {
-      const msg =
-        err?.response?.data?.message ??
-        err?.message ??
-        'Failed to create employee'
-      toast.error(msg)
-    },
+    onError: (err) =>
+      toast.error(getErrorMessage(err, 'Failed to create employee')),
   })
 }
