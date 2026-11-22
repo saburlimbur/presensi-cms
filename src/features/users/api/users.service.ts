@@ -14,6 +14,20 @@ export const usersService = {
     return res.data
   },
 
+  // Upload foto profil sendiri (PATCH /users/profile/photo). Backend membaca
+  // field multipart `profile_photo`, hanya jpeg/jpg/png, maksimal 5 MB, dan
+  // mengembalikan user dengan profilePhoto_url (signed URL) yang baru.
+  updateProfilePhoto: async (file: File) => {
+    const body = new FormData()
+    body.append('profile_photo', file)
+    // instance axios default-nya application/json; untuk FormData harus
+    // di-override supaya dikirim sebagai multipart (boundary diisi axios).
+    const res = await api.patch<{ data: User }>('/users/profile/photo', body, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return res.data.data
+  },
+
   // Ganti password sendiri (PATCH /users/password, updatePasswordSchema).
   // Backend mencabut semua refresh token user setelah berhasil.
   updatePassword: async (payload: {
