@@ -4,6 +4,7 @@ import {
   LayoutGrid,
   Pencil,
   Plus,
+  Search as SearchIcon,
   Trash2,
   User,
   Users,
@@ -12,6 +13,7 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Header } from '@/components/layout/header'
 import { Main } from '@/components/layout/main'
@@ -41,6 +43,19 @@ function DepartmentsContent() {
   const { data: departments, isLoading } = useGetAllDepartments()
   const { setOpen, setCurrentRow } = useDepartments()
   const [selectedId, setSelectedId] = useState<string>('all')
+  const [search, setSearch] = useState('')
+
+  // Daftar departemen sudah diambil semua (limit 100), jadi pencarian
+  // nama/kode cukup di browser dan kartu ringkasan tetap menghitung total.
+  const visibleDepartments = useMemo(() => {
+    const keyword = search.trim().toLowerCase()
+    if (!keyword) return departments ?? []
+    return (departments ?? []).filter(
+      (d: Department) =>
+        d.name.toLowerCase().includes(keyword) ||
+        d.code.toLowerCase().includes(keyword)
+    )
+  }, [departments, search])
 
   const totalEmployees =
     departments?.reduce(
@@ -141,9 +156,20 @@ function DepartmentsContent() {
 
         {/* selectable department cards */}
         <div>
-          <h3 className='mb-3 text-sm font-medium text-muted-foreground'>
-            Select a department to view employees
-          </h3>
+          <div className='mb-3 flex flex-wrap items-center justify-between gap-3'>
+            <h3 className='text-sm font-medium text-muted-foreground'>
+              Select a department to view employees
+            </h3>
+            <div className='relative w-full sm:w-64'>
+              <SearchIcon className='absolute start-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground' />
+              <Input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder='Cari nama atau kode...'
+                className='h-9 ps-8'
+              />
+            </div>
+          </div>
           {isLoading ? (
             <div className='grid gap-3 sm:grid-cols-2 lg:grid-cols-3'>
               {Array.from({ length: 6 }).map((_, i) => (
@@ -198,7 +224,7 @@ function DepartmentsContent() {
               </Card>
 
               {/* Individual Department Cards */}
-              {departments?.map((dept: Department) => {
+              {visibleDepartments.map((dept: Department) => {
                 const isSelected = selectedId === dept.id
                 return (
                   <Card
@@ -280,6 +306,11 @@ function DepartmentsContent() {
                   </Card>
                 )
               })}
+              {visibleDepartments.length === 0 && search.trim() !== '' && (
+                <p className='col-span-full py-6 text-center text-sm text-muted-foreground'>
+                  Tidak ada departemen yang cocok dengan "{search.trim()}".
+                </p>
+              )}
             </div>
           )}
         </div>

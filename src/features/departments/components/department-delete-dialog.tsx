@@ -29,7 +29,9 @@ export function DepartmentDeleteDialog({
       open={open}
       onOpenChange={onOpenChange}
       handleConfirm={handleDelete}
-      disabled={deleteDepartment.isPending}
+      // Server tidak menolak penghapusan departemen yang masih berisi karyawan
+      // (FK-nya SET NULL, karyawan jadi tanpa departemen), jadi dicegah di sini.
+      disabled={deleteDepartment.isPending || employeeCount > 0}
       title={
         <span className='text-destructive'>
           <AlertTriangle
@@ -50,7 +52,7 @@ export function DepartmentDeleteDialog({
             <AlertTitle>Warning!</AlertTitle>
             <AlertDescription>
               {employeeCount > 0
-                ? `Departemen ini masih memiliki ${employeeCount} karyawan. Pindahkan karyawan terlebih dahulu — penghapusan akan ditolak server jika masih terkait.`
+                ? `Departemen ini masih memiliki ${employeeCount} karyawan. Pindahkan karyawan ke departemen lain terlebih dahulu sebelum menghapus.`
                 : 'Penghapusan departemen bersifat permanen.'}
             </AlertDescription>
           </Alert>
