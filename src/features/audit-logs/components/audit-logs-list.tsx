@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -43,11 +44,19 @@ export function AuditLogsList() {
   const [page, setPage] = useState(1)
   const [limit, setLimit] = useState(20)
   const [action, setAction] = useState('all')
+  // yyyy-MM-dd dari input date; backend menerima ISO date (dateFrom/dateTo)
+  // dan menolak dateTo < dateFrom, jadi rentang terbalik tidak dikirim.
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+  const isRangeInvalid = !!dateFrom && !!dateTo && dateTo < dateFrom
+  const hasFilter = action !== 'all' || !!dateFrom || !!dateTo
 
   const params = {
     page,
     limit,
     ...(action !== 'all' ? { action } : {}),
+    ...(dateFrom && !isRangeInvalid ? { dateFrom } : {}),
+    ...(dateTo && !isRangeInvalid ? { dateTo } : {}),
   }
 
   const { data, isLoading, isFetching } = useGetAuditLogs(params)
@@ -60,7 +69,7 @@ export function AuditLogsList() {
     <div className='flex flex-col gap-4'>
       {/* Toolbar */}
       <div className='flex flex-wrap items-center justify-between gap-2'>
-        <div className='flex items-center gap-2'>
+        <div className='flex flex-wrap items-center gap-2'>
           <Select
             value={action}
             onValueChange={(v) => {
@@ -79,6 +88,48 @@ export function AuditLogsList() {
               ))}
             </SelectContent>
           </Select>
+          <Input
+            type='date'
+            aria-label='Dari tanggal'
+            value={dateFrom}
+            max={dateTo || undefined}
+            onChange={(e) => {
+              setDateFrom(e.target.value)
+              setPage(1)
+            }}
+            className='w-[150px]'
+          />
+          <span className='text-xs text-muted-foreground'>s/d</span>
+          <Input
+            type='date'
+            aria-label='Sampai tanggal'
+            value={dateTo}
+            min={dateFrom || undefined}
+            onChange={(e) => {
+              setDateTo(e.target.value)
+              setPage(1)
+            }}
+            className='w-[150px]'
+          />
+          {hasFilter && (
+            <Button
+              variant='ghost'
+              size='sm'
+              onClick={() => {
+                setAction('all')
+                setDateFrom('')
+                setDateTo('')
+                setPage(1)
+              }}
+            >
+              Reset
+            </Button>
+          )}
+          {isRangeInvalid && (
+            <span className='text-xs text-destructive'>
+              Tanggal akhir lebih awal dari tanggal mulai.
+            </span>
+          )}
         </div>
 
         <div className='flex items-center gap-2 text-xs text-muted-foreground'>
@@ -89,7 +140,7 @@ export function AuditLogsList() {
             </span>
           )}
           <span>
-            {total} total log {action !== 'all' ? `(filtered)` : ''}
+            {total} total log {hasFilter ? `(filtered)` : ''}
           </span>
         </div>
       </div>

@@ -1,10 +1,13 @@
-// Mirror AUDIT_ACTIONS di absensi-server/src/modules/audit_logs/audit_logs.model.js.
+// Mirror AUDIT_ACTIONS di presensi-app/apps/api/src/modules/audit_logs/audit_logs.model.js.
 // Kalau backend tambah action baru, update list ini.
 export const AUDIT_ACTIONS = {
   USER_CREATED: 'user.created',
+  USER_UPDATED: 'user.updated',
   USER_TOGGLED_ACTIVE: 'user.toggled_active',
+  USER_PASSWORD_RESET: 'user.password_reset',
   PERMISSION_APPROVED: 'permission.approved',
   PERMISSION_REJECTED: 'permission.rejected',
+  PERMISSION_CANCELLED: 'permission.cancelled',
   ATTENDANCE_MANUAL_CREATED: 'attendance.manual_created',
   LEAVE_BALANCE_CREATED: 'leave_balance.created',
   LEAVE_BALANCE_UPDATED: 'leave_balance.updated',
@@ -20,6 +23,18 @@ export const AUDIT_ACTION_META: Record<
   'user.created': {
     label: 'User Logs',
     color: 'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200',
+  },
+  'user.updated': {
+    label: 'User Updated',
+    color: 'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200',
+  },
+  'user.password_reset': {
+    label: 'Password Reset',
+    color: 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200',
+  },
+  'permission.cancelled': {
+    label: 'Permission Cancelled',
+    color: 'bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-200',
   },
   'user.toggled_active': {
     label: 'User Toggled',
