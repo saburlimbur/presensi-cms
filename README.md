@@ -1,8 +1,8 @@
-# Absensi — CMS Admin
+# Presensi — CMS Admin
 
 Dashboard admin untuk sistem absensi berbasis face recognition dan geofencing. Dipakai HR/admin untuk mengelola karyawan, memantau kehadiran, dan memproses pengajuan izin.
 
-Backend-nya ada di [`absensi-server`](../absensi-server) — dashboard ini tidak jalan tanpa itu. Aplikasi sisi karyawan ada di [`absensi-client`](../absensi-client).
+Backend-nya ada di monorepo [`presensi-app`](https://github.com/saburlimbur/presensi-app) (`apps/api`) — dashboard ini tidak jalan tanpa itu. Aplikasi sisi karyawan ada di repo yang sama (`apps/web`).
 
 ## Fitur
 
@@ -65,7 +65,7 @@ Deploy lewat Vercel (`vercel.json`); push ke branch = deploy otomatis. Server ha
 
 ## Sisa template
 
-Dashboard ini dibangun di atas [shadcn-admin](https://github.com/satnaing/shadcn-admin) karya [@satnaing](https://github.com/satnaing) (MIT). Beberapa bagian template masih ada dan **belum dipakai**: feature `apps`, `chats`, `tasks`, `dashboard`, `settings`, plus dependency `@clerk/clerk-react` (auth dashboard ini pakai JWT sendiri, bukan Clerk). Aman dihapus kalau mau bersih-bersih — `npm run knip` bisa bantu memetakannya.
+Dashboard ini dibangun di atas [shadcn-admin](https://github.com/satnaing/shadcn-admin) karya [@satnaing](https://github.com/satnaing) (MIT). Bagian template yang tidak dipakai (feature demo, Clerk) sudah dibuang; auth dashboard ini pakai JWT sendiri.
 
 ## Lisensi
 
