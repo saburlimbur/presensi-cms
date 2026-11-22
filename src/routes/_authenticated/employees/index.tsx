@@ -15,7 +15,11 @@ const employeesSearchSchema = z.object({
     .optional()
     .catch([]),
   position: z
-    .array(z.enum(positions.map((p) => p.value as (typeof positions)[number]['value'])))
+    .array(
+      z.enum(
+        positions.map((p) => p.value as (typeof positions)[number]['value'])
+      )
+    )
     .optional()
     .catch([]),
   fullName: z.string().optional().catch(''),

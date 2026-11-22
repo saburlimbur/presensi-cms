@@ -49,7 +49,7 @@ export const shiftsColumns: ColumnDef<Shift>[] = [
     cell: ({ row }) => {
       const { startTime, endTime } = row.original
       return (
-        <div className='inline-flex items-center gap-1.5 text-xs font-mono tabular-nums'>
+        <div className='inline-flex items-center gap-1.5 font-mono text-xs tabular-nums'>
           <Clock size={12} className='text-muted-foreground' />
           {formatTime(startTime)} – {formatTime(endTime)}
         </div>

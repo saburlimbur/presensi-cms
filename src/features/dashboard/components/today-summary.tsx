@@ -80,10 +80,7 @@ export function TodaySummary() {
           {TILES.map((tile) => {
             const Icon = tile.icon
             return (
-              <div
-                key={tile.key}
-                className='rounded-lg border bg-muted/30 p-3'
-              >
+              <div key={tile.key} className='rounded-lg border bg-muted/30 p-3'>
                 <div className='flex items-center justify-between'>
                   <span className='text-xs font-medium text-muted-foreground'>
                     {tile.label}

@@ -23,9 +23,7 @@ export function LeaveBalancesProvider({
   const [currentRow, setCurrentRow] = useState<LeaveBalance | null>(null)
 
   return (
-    <LeaveBalancesContext
-      value={{ open, setOpen, currentRow, setCurrentRow }}
-    >
+    <LeaveBalancesContext value={{ open, setOpen, currentRow, setCurrentRow }}>
       {children}
     </LeaveBalancesContext>
   )

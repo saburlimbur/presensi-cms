@@ -1,5 +1,5 @@
-import { ShiftFormDialog } from './shift-form-dialog'
 import { ShiftDeleteDialog } from './shift-delete-dialog'
+import { ShiftFormDialog } from './shift-form-dialog'
 import { useShifts } from './shifts-provider'
 
 export function ShiftsDialogs() {

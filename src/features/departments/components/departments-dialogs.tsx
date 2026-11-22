@@ -1,5 +1,5 @@
-import { DepartmentFormDialog } from './department-form-dialog'
 import { DepartmentDeleteDialog } from './department-delete-dialog'
+import { DepartmentFormDialog } from './department-form-dialog'
 import { useDepartments } from './departments-provider'
 
 export function DepartmentsDialogs() {

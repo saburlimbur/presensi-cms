@@ -1,7 +1,8 @@
-import { useNavigate } from '@tanstack/react-router'
 import { formatDistanceToNow } from 'date-fns'
+import { useNavigate } from '@tanstack/react-router'
 import { id } from 'date-fns/locale'
 import { Bell, CheckCheck, Loader2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import {
   type Notification,
   type NotificationDataAttendance,
@@ -11,7 +12,6 @@ import useGetNotifications from '@/features/notifications/hooks/use-get-notifica
 import useMarkAllRead from '@/features/notifications/hooks/use-mark-all-read'
 import useMarkAsRead from '@/features/notifications/hooks/use-mark-as-read'
 import useUnreadCount from '@/features/notifications/hooks/use-unread-count'
-import { cn } from '@/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -121,7 +121,7 @@ export function NotificationDropdown() {
                     aria-hidden
                   />
                   <div className='flex-1'>
-                    <p className='text-sm font-medium leading-tight'>
+                    <p className='text-sm leading-tight font-medium'>
                       {n.title}
                     </p>
                     <p className='mt-0.5 text-xs whitespace-normal text-muted-foreground'>

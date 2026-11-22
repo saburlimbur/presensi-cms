@@ -1,5 +1,5 @@
-import { LocationFormDialog } from './location-form-dialog'
 import { LocationDeleteDialog } from './location-delete-dialog'
+import { LocationFormDialog } from './location-form-dialog'
 import { useLocations } from './locations-provider'
 
 export function LocationsDialogs() {

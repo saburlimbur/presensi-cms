@@ -1,8 +1,8 @@
 import { AlertTriangle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { ConfirmDialog } from '@/components/confirm-dialog'
-import { type Department } from './departments-columns'
 import useDeleteDepartment from '../hooks/use-delete-department'
+import { type Department } from './departments-columns'
 
 type DepartmentDeleteDialogProps = {
   open: boolean

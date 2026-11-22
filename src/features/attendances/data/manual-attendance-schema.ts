@@ -35,15 +35,16 @@ export const manualAttendanceFormSchema = z
     status: z.enum(ATTENDANCE_STATUSES),
     workMode: z.enum(WORK_MODES),
     shiftName: z.string().optional(),
-    note: z.string().max(500, 'Catatan maksimal 500 karakter').optional().or(z.literal('')),
+    note: z
+      .string()
+      .max(500, 'Catatan maksimal 500 karakter')
+      .optional()
+      .or(z.literal('')),
   })
-  .refine(
-    (v) => !v.checkOut || new Date(v.checkOut) >= new Date(v.checkIn),
-    {
-      message: 'Jam keluar tidak boleh sebelum jam masuk',
-      path: ['checkOut'],
-    }
-  )
+  .refine((v) => !v.checkOut || new Date(v.checkOut) >= new Date(v.checkIn), {
+    message: 'Jam keluar tidak boleh sebelum jam masuk',
+    path: ['checkOut'],
+  })
 export type ManualAttendanceFormValues = z.infer<
   typeof manualAttendanceFormSchema
 >

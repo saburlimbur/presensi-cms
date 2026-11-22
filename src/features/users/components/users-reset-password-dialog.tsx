@@ -141,10 +141,7 @@ export function UsersResetPasswordDialog({
             {result ? 'Close' : 'Cancel'}
           </AlertDialogCancel>
           {!result && (
-            <Button
-              onClick={handleGenerate}
-              disabled={resetPassword.isPending}
-            >
+            <Button onClick={handleGenerate} disabled={resetPassword.isPending}>
               {resetPassword.isPending ? 'Generating...' : 'Generate Link'}
             </Button>
           )}

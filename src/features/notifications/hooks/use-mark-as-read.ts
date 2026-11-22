@@ -12,8 +12,12 @@ export default function useMarkAsRead() {
     },
     onError: (err: unknown) => {
       const msg =
-        (err as { response?: { data?: { message?: string } }; message?: string })
-          ?.response?.data?.message ??
+        (
+          err as {
+            response?: { data?: { message?: string } }
+            message?: string
+          }
+        )?.response?.data?.message ??
         (err as { message?: string })?.message ??
         'Gagal menandai notifikasi'
       toast.error(msg)

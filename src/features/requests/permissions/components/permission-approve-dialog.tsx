@@ -1,8 +1,8 @@
 'use client'
 
+import { format } from 'date-fns'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
 import { CalendarDays, CheckCircle2, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -81,7 +81,7 @@ export function PermissionApproveDialog({
         onOpenChange(s)
       }}
     >
-      <DialogContent className='sm:max-w-md gap-0 overflow-hidden p-0'>
+      <DialogContent className='gap-0 overflow-hidden p-0 sm:max-w-md'>
         <div className='relative border-b bg-gradient-to-br from-emerald-500/10 via-emerald-500/5 to-transparent px-6 pt-6 pb-5'>
           <DialogHeader className='text-start'>
             <div className='mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/30'>
@@ -144,7 +144,7 @@ export function PermissionApproveDialog({
                       </FormLabel>
                       <span
                         className={cn(
-                          'text-[10px] tabular-nums text-muted-foreground',
+                          'text-[10px] text-muted-foreground tabular-nums',
                           noteValue.length >= MAX_NOTE && 'text-amber-500'
                         )}
                       >
@@ -169,11 +169,7 @@ export function PermissionApproveDialog({
         </div>
 
         <DialogFooter className='gap-2 border-t bg-muted/30 px-6 py-3 sm:gap-2'>
-          <Button
-            variant='ghost'
-            size='sm'
-            onClick={() => onOpenChange(false)}
-          >
+          <Button variant='ghost' size='sm' onClick={() => onOpenChange(false)}>
             Cancel
           </Button>
           <Button

@@ -30,8 +30,7 @@ const STATUS_MAP: Record<
   },
   CANCELLED: {
     label: 'Cancelled',
-    className:
-      'border-muted-foreground/30 bg-muted text-muted-foreground',
+    className: 'border-muted-foreground/30 bg-muted text-muted-foreground',
     dot: 'bg-muted-foreground',
   },
 }

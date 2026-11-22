@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect } from 'react'
+import { format } from 'date-fns'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -137,7 +137,7 @@ export function ShiftFormDialog({
           <form
             id='shift-form'
             onSubmit={form.handleSubmit(onSubmit)}
-            className='space-y-4 max-h-[60vh] overflow-y-auto pr-1'
+            className='max-h-[60vh] space-y-4 overflow-y-auto pr-1'
           >
             <FormField
               control={form.control}
@@ -258,11 +258,7 @@ export function ShiftFormDialog({
 
         <DialogFooter>
           <Button type='submit' form='shift-form' disabled={isPending}>
-            {isPending
-              ? 'Saving...'
-              : isEdit
-                ? 'Save changes'
-                : 'Create Shift'}
+            {isPending ? 'Saving...' : isEdit ? 'Save changes' : 'Create Shift'}
           </Button>
         </DialogFooter>
       </DialogContent>

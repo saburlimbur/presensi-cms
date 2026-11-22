@@ -44,13 +44,14 @@ export function ShiftDeleteDialog({
         <div className='space-y-4'>
           <p className='mb-2'>
             Are you sure you want to delete shift{' '}
-            <span className='font-bold'>{currentRow.name}</span>? This cannot
-            be undone.
+            <span className='font-bold'>{currentRow.name}</span>? This cannot be
+            undone.
           </p>
           <Alert variant='destructive'>
             <AlertTitle>Warning!</AlertTitle>
             <AlertDescription>
-              Employees currently assigned to this shift may lose their schedule.
+              Employees currently assigned to this shift may lose their
+              schedule.
             </AlertDescription>
           </Alert>
         </div>

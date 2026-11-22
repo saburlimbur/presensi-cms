@@ -89,8 +89,7 @@ export function LeaveBalanceFormDialog({
     }
   }, [open, currentRow, form])
 
-  const isPending =
-    createLeaveBalance.isPending || updateLeaveBalance.isPending
+  const isPending = createLeaveBalance.isPending || updateLeaveBalance.isPending
 
   const onSubmit = (values: CreateLeaveBalanceFormValues) => {
     if (isEdit && currentRow) {
@@ -129,7 +128,7 @@ export function LeaveBalanceFormDialog({
           <form
             id='leave-balance-form'
             onSubmit={form.handleSubmit(onSubmit)}
-            className='space-y-4 max-h-[60vh] overflow-y-auto pr-1'
+            className='max-h-[60vh] space-y-4 overflow-y-auto pr-1'
           >
             <FormField
               control={form.control}

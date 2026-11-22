@@ -47,20 +47,26 @@ export interface RangePeriod {
 
 export type AttendancePeriod = MonthlyPeriod | WeeklyPeriod | RangePeriod
 
-export interface AttendanceRecapData<TPeriod extends AttendancePeriod = AttendancePeriod> {
+export interface AttendanceRecapData<
+  TPeriod extends AttendancePeriod = AttendancePeriod,
+> {
   period: TPeriod
   summary: AttendanceSummary
   details: EmployeeAttendanceDetail[]
 }
 
-export interface AttendanceRecapResponse<TPeriod extends AttendancePeriod = AttendancePeriod> {
+export interface AttendanceRecapResponse<
+  TPeriod extends AttendancePeriod = AttendancePeriod,
+> {
   success: boolean
   message: string
   data: AttendanceRecapData<TPeriod>
 }
 
-export type MonthlyAttendanceRecapResponse = AttendanceRecapResponse<MonthlyPeriod>
-export type WeeklyAttendanceRecapResponse = AttendanceRecapResponse<WeeklyPeriod>
+export type MonthlyAttendanceRecapResponse =
+  AttendanceRecapResponse<MonthlyPeriod>
+export type WeeklyAttendanceRecapResponse =
+  AttendanceRecapResponse<WeeklyPeriod>
 export type RangeAttendanceRecapResponse = AttendanceRecapResponse<RangePeriod>
 
 // Re-export untuk backward-compat dgn import lama.

@@ -1,6 +1,8 @@
 'use client'
 
 import { format } from 'date-fns'
+import { getAssetUrl } from '@/lib/assets'
+import { Badge } from '@/components/ui/badge'
 import {
   Dialog,
   DialogContent,
@@ -8,10 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { getAssetUrl } from '@/lib/assets'
 import { useAttendanceDetail } from '../hooks/use-attendance-detail'
 
 type AttendanceDetailDialogProps = {
@@ -29,13 +29,7 @@ function fmt(dt?: string | null, pattern = 'dd MMM yyyy, HH:mm') {
   }
 }
 
-function Field({
-  label,
-  value,
-}: {
-  label: string
-  value: React.ReactNode
-}) {
+function Field({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className='space-y-0.5'>
       <p className='text-[10px] font-semibold tracking-wide text-muted-foreground uppercase'>
@@ -95,7 +89,9 @@ export function AttendanceDetailDialog({
                       : 'border-rose-500/30 bg-rose-500/10 text-rose-600 dark:text-rose-400'
                   }
                 >
-                  {detail.isLocationValid ? 'Location valid' : 'Location invalid'}
+                  {detail.isLocationValid
+                    ? 'Location valid'
+                    : 'Location invalid'}
                 </Badge>
               )}
             </div>

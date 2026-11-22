@@ -1,5 +1,13 @@
 import { useMemo, useState } from 'react'
-import { Building2, LayoutGrid, Pencil, Plus, Trash2, User, Users } from 'lucide-react'
+import {
+  Building2,
+  LayoutGrid,
+  Pencil,
+  Plus,
+  Trash2,
+  User,
+  Users,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

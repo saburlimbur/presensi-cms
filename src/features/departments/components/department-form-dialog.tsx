@@ -29,9 +29,9 @@ import {
   type DepartmentFormValues,
   NO_HEAD,
 } from '../data/schema'
-import { type Department } from './departments-columns'
 import useCreateDepartment from '../hooks/use-create-department'
 import useUpdateDepartment from '../hooks/use-update-department'
+import { type Department } from './departments-columns'
 
 type DepartmentFormDialogProps = {
   currentRow?: Department

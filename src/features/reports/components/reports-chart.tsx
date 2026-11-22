@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import {
   Bar,
   BarChart,
@@ -8,7 +9,6 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { Loader2 } from 'lucide-react'
 import type { AttendanceSummary } from '../types/types'
 
 interface Props {

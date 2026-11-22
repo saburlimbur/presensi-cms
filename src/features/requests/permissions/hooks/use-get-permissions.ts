@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { type Permission } from '../data/schema'
 import { permissionsService } from '../api/permissions.service'
+import { type Permission } from '../data/schema'
 
 export default function useGetPermissions(params?: Record<string, unknown>) {
   const query = useQuery({

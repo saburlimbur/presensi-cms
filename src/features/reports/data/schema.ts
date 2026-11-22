@@ -1,6 +1,5 @@
 // Konstanta filter — sumber kebenaran enum mengikuti
 // absensi-server/prisma/schema.prisma (AttendanceStatus, WorkMode).
-
 import type { Granularity } from '../types/types'
 
 export const GRANULARITY_OPTIONS: { value: Granularity; label: string }[] = [

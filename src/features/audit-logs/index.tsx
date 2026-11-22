@@ -22,8 +22,8 @@ export default function AuditLogs() {
         <div>
           <h2 className='text-2xl font-bold tracking-tight'>Audit Logs</h2>
           <p className='text-muted-foreground'>
-            Catatan aksi admin (approve izin, manual attendance, ubah user,
-            dll) untuk keperluan forensik & compliance.
+            Catatan aksi admin (approve izin, manual attendance, ubah user, dll)
+            untuk keperluan forensik & compliance.
           </p>
         </div>
         <AuditLogsList />

@@ -49,7 +49,7 @@ export function PermissionDetailDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className='space-y-4 max-h-[60vh] overflow-y-auto pr-1'>
+        <div className='max-h-[60vh] space-y-4 overflow-y-auto pr-1'>
           <div className='flex items-center justify-between'>
             <div className='flex items-center gap-3'>
               <div className='flex h-10 w-10 items-center justify-center rounded-full bg-muted text-sm font-semibold'>
@@ -99,7 +99,7 @@ export function PermissionDetailDialog({
           </div>
 
           <div>
-            <div className='text-[11px] font-bold tracking-widest uppercase text-muted-foreground mb-1.5'>
+            <div className='mb-1.5 text-[11px] font-bold tracking-widest text-muted-foreground uppercase'>
               Reason
             </div>
             <div className='rounded-md border bg-muted/30 p-3 text-xs whitespace-pre-wrap'>
@@ -109,7 +109,7 @@ export function PermissionDetailDialog({
 
           {data.attachmentUrl_url ? (
             <div>
-              <div className='text-[11px] font-bold tracking-widest uppercase text-muted-foreground mb-1.5'>
+              <div className='mb-1.5 text-[11px] font-bold tracking-widest text-muted-foreground uppercase'>
                 Attachment
               </div>
               <a
@@ -126,7 +126,7 @@ export function PermissionDetailDialog({
 
           {data.status !== 'PENDING' && data.approvedNote ? (
             <div>
-              <div className='text-[11px] font-bold tracking-widest uppercase text-muted-foreground mb-1.5'>
+              <div className='mb-1.5 text-[11px] font-bold tracking-widest text-muted-foreground uppercase'>
                 Admin Note
               </div>
               <div className='rounded-md border bg-muted/30 p-3 text-xs'>
@@ -137,10 +137,12 @@ export function PermissionDetailDialog({
 
           {data.status !== 'PENDING' && data.approver ? (
             <div>
-              <div className='text-[11px] font-bold tracking-widest uppercase text-muted-foreground mb-1.5'>
+              <div className='mb-1.5 text-[11px] font-bold tracking-widest text-muted-foreground uppercase'>
                 {data.status === 'APPROVED' ? 'Disetujui oleh' : 'Ditolak oleh'}
               </div>
-              <div className='text-sm font-medium'>{data.approver.fullName}</div>
+              <div className='text-sm font-medium'>
+                {data.approver.fullName}
+              </div>
             </div>
           ) : null}
         </div>
@@ -181,10 +183,10 @@ function InfoRow({
     <div className='flex items-start gap-2 rounded-md border bg-muted/30 p-2.5'>
       <Icon size={14} className='mt-0.5 text-muted-foreground' />
       <div className='min-w-0'>
-        <div className='text-[10px] font-bold tracking-widest uppercase text-muted-foreground'>
+        <div className='text-[10px] font-bold tracking-widest text-muted-foreground uppercase'>
           {label}
         </div>
-        <div className='text-xs font-medium truncate'>{value}</div>
+        <div className='truncate text-xs font-medium'>{value}</div>
       </div>
     </div>
   )

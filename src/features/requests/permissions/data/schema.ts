@@ -15,7 +15,10 @@ export const permissionTypeEnum = z.enum([
 ])
 export type PermissionType = z.infer<typeof permissionTypeEnum>
 
-export const PERMISSION_TYPE_OPTIONS: { label: string; value: PermissionType }[] = [
+export const PERMISSION_TYPE_OPTIONS: {
+  label: string
+  value: PermissionType
+}[] = [
   { label: 'Sick', value: 'SICK' },
   { label: 'Permit', value: 'PERMIT' },
   { label: 'Annual Leave', value: 'ANNUAL_LEAVE' },

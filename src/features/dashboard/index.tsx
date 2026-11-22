@@ -109,9 +109,7 @@ export function Dashboard() {
                   (summary?.totalLate ?? 0)
                 )}
               </div>
-              <p className='text-xs text-muted-foreground'>
-                Total status LATE
-              </p>
+              <p className='text-xs text-muted-foreground'>Total status LATE</p>
             </CardContent>
           </Card>
 

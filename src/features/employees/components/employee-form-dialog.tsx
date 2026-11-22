@@ -24,14 +24,8 @@ import { PasswordInput } from '@/components/password-input'
 import { SelectDropdown } from '@/components/select-dropdown'
 import useGetAllDepartments from '@/features/departments/hooks/useGetAllDepartments'
 import { positions } from '@/features/users/data/data'
-import {
-  type User,
-  type Department,
-} from '@/features/users/data/schema'
-import {
-  employeeFormSchema,
-  type EmployeeFormValues,
-} from '../data/schema'
+import { type User, type Department } from '@/features/users/data/schema'
+import { employeeFormSchema, type EmployeeFormValues } from '../data/schema'
 import useCreateEmployee from '../hooks/use-create-employee'
 import useUpdateEmployee from '../hooks/use-update-employee'
 
@@ -61,25 +55,25 @@ export function EmployeeFormDialog({
     resolver: zodResolver(employeeFormSchema),
     defaultValues: isEdit
       ? {
-        fullName: currentRow.fullName,
-        email: currentRow.email,
-        phone: currentRow.phone,
-        departmentCode: currentRow.department?.code ?? '',
-        position: currentRow.position,
-        password: '',
-        confirmPassword: '',
-        isEdit,
-      }
+          fullName: currentRow.fullName,
+          email: currentRow.email,
+          phone: currentRow.phone,
+          departmentCode: currentRow.department?.code ?? '',
+          position: currentRow.position,
+          password: '',
+          confirmPassword: '',
+          isEdit,
+        }
       : {
-        fullName: '',
-        email: '',
-        phone: '',
-        departmentCode: '',
-        position: 'STAFF',
-        password: '',
-        confirmPassword: '',
-        isEdit,
-      },
+          fullName: '',
+          email: '',
+          phone: '',
+          departmentCode: '',
+          position: 'STAFF',
+          password: '',
+          confirmPassword: '',
+          isEdit,
+        },
   })
 
   const onSubmit = (values: EmployeeFormValues) => {

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { useNavigate } from '@tanstack/react-router'
 import { formatDistanceToNow } from 'date-fns'
+import { useNavigate } from '@tanstack/react-router'
 import { id } from 'date-fns/locale'
 import {
   Bell,
@@ -13,14 +13,14 @@ import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import useGetNotifications from '../hooks/use-get-notifications'
-import useMarkAllRead from '../hooks/use-mark-all-read'
-import useMarkAsRead from '../hooks/use-mark-as-read'
 import {
   type Notification,
   type NotificationDataAttendance,
   type NotificationDataPermission,
 } from '../data/schema'
+import useGetNotifications from '../hooks/use-get-notifications'
+import useMarkAllRead from '../hooks/use-mark-all-read'
+import useMarkAsRead from '../hooks/use-mark-as-read'
 
 const PAGE_SIZE = 15
 
@@ -37,13 +37,20 @@ const routeFromNotif = (n: Notification): string | null => {
 }
 
 const typeColor: Record<string, string> = {
-  PERMISSION_SUBMITTED: 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200',
-  PERMISSION_APPROVED: 'bg-green-100 text-green-900 dark:bg-green-950 dark:text-green-200',
-  PERMISSION_REJECTED: 'bg-red-100 text-red-900 dark:bg-red-950 dark:text-red-200',
-  ATTENDANCE_CHECK_IN: 'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200',
-  ATTENDANCE_CHECK_OUT: 'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200',
-  ATTENDANCE_REMINDER: 'bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-200',
-  ANNOUNCEMENT: 'bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-200',
+  PERMISSION_SUBMITTED:
+    'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200',
+  PERMISSION_APPROVED:
+    'bg-green-100 text-green-900 dark:bg-green-950 dark:text-green-200',
+  PERMISSION_REJECTED:
+    'bg-red-100 text-red-900 dark:bg-red-950 dark:text-red-200',
+  ATTENDANCE_CHECK_IN:
+    'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200',
+  ATTENDANCE_CHECK_OUT:
+    'bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-blue-200',
+  ATTENDANCE_REMINDER:
+    'bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-200',
+  ANNOUNCEMENT:
+    'bg-purple-100 text-purple-900 dark:bg-purple-950 dark:text-purple-200',
   SYSTEM: 'bg-slate-100 text-slate-900 dark:bg-slate-900 dark:text-slate-200',
 }
 

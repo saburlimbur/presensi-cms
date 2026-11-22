@@ -28,12 +28,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { AUDIT_ACTION_META, AUDIT_ACTIONS, type AuditLog } from '../data/schema'
 import useGetAuditLogs from '../hooks/use-get-audit-logs'
-import {
-  AUDIT_ACTION_META,
-  AUDIT_ACTIONS,
-  type AuditLog,
-} from '../data/schema'
 
 const ACTION_OPTIONS = [
   { value: 'all', label: 'Semua Action' },
@@ -165,9 +161,8 @@ export function AuditLogsList() {
 
           <div className='flex items-center gap-2'>
             <span>
-              Page{' '}
-              <span className='font-semibold text-foreground'>{page}</span> of{' '}
-              {totalPages}
+              Page <span className='font-semibold text-foreground'>{page}</span>{' '}
+              of {totalPages}
             </span>
             <Button
               variant='outline'

@@ -13,8 +13,12 @@ export default function useMarkAllRead() {
     },
     onError: (err: unknown) => {
       const msg =
-        (err as { response?: { data?: { message?: string } }; message?: string })
-          ?.response?.data?.message ??
+        (
+          err as {
+            response?: { data?: { message?: string } }
+            message?: string
+          }
+        )?.response?.data?.message ??
         (err as { message?: string })?.message ??
         'Gagal menandai semua notifikasi'
       toast.error(msg)
