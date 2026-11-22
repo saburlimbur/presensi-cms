@@ -27,6 +27,7 @@ import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authen
 import { Route as AuthenticatedEmployeesIndexRouteImport } from './routes/_authenticated/employees/index'
 import { Route as AuthenticatedDepartmentsIndexRouteImport } from './routes/_authenticated/departments/index'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
+import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_authenticated/settings/account'
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedAttendancesShiftsRouteImport } from './routes/_authenticated/attendances/shifts'
 import { Route as AuthenticatedAttendancesReportsRouteImport } from './routes/_authenticated/attendances/reports'
@@ -129,6 +130,12 @@ const AuthenticatedSettingsAppearanceRoute =
     path: '/appearance',
     getParentRoute: () => AuthenticatedSettingsRouteRoute,
   } as any)
+const AuthenticatedSettingsAccountRoute =
+  AuthenticatedSettingsAccountRouteImport.update({
+    id: '/account',
+    path: '/account',
+    getParentRoute: () => AuthenticatedSettingsRouteRoute,
+  } as any)
 const AuthenticatedErrorsErrorRoute =
   AuthenticatedErrorsErrorRouteImport.update({
     id: '/errors/$error',
@@ -178,6 +185,7 @@ export interface FileRoutesByFullPath {
   '/attendances/reports': typeof AuthenticatedAttendancesReportsRoute
   '/attendances/shifts': typeof AuthenticatedAttendancesShiftsRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/departments/': typeof AuthenticatedDepartmentsIndexRoute
   '/employees/': typeof AuthenticatedEmployeesIndexRoute
@@ -201,6 +209,7 @@ export interface FileRoutesByTo {
   '/attendances/reports': typeof AuthenticatedAttendancesReportsRoute
   '/attendances/shifts': typeof AuthenticatedAttendancesShiftsRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/departments': typeof AuthenticatedDepartmentsIndexRoute
   '/employees': typeof AuthenticatedEmployeesIndexRoute
@@ -227,6 +236,7 @@ export interface FileRoutesById {
   '/_authenticated/attendances/reports': typeof AuthenticatedAttendancesReportsRoute
   '/_authenticated/attendances/shifts': typeof AuthenticatedAttendancesShiftsRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
+  '/_authenticated/settings/account': typeof AuthenticatedSettingsAccountRoute
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/departments/': typeof AuthenticatedDepartmentsIndexRoute
   '/_authenticated/employees/': typeof AuthenticatedEmployeesIndexRoute
@@ -253,6 +263,7 @@ export interface FileRouteTypes {
     | '/attendances/reports'
     | '/attendances/shifts'
     | '/errors/$error'
+    | '/settings/account'
     | '/settings/appearance'
     | '/departments/'
     | '/employees/'
@@ -276,6 +287,7 @@ export interface FileRouteTypes {
     | '/attendances/reports'
     | '/attendances/shifts'
     | '/errors/$error'
+    | '/settings/account'
     | '/settings/appearance'
     | '/departments'
     | '/employees'
@@ -301,6 +313,7 @@ export interface FileRouteTypes {
     | '/_authenticated/attendances/reports'
     | '/_authenticated/attendances/shifts'
     | '/_authenticated/errors/$error'
+    | '/_authenticated/settings/account'
     | '/_authenticated/settings/appearance'
     | '/_authenticated/departments/'
     | '/_authenticated/employees/'
@@ -448,6 +461,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsAppearanceRouteImport
       parentRoute: typeof AuthenticatedSettingsRouteRoute
     }
+    '/_authenticated/settings/account': {
+      id: '/_authenticated/settings/account'
+      path: '/account'
+      fullPath: '/settings/account'
+      preLoaderRoute: typeof AuthenticatedSettingsAccountRouteImport
+      parentRoute: typeof AuthenticatedSettingsRouteRoute
+    }
     '/_authenticated/errors/$error': {
       id: '/_authenticated/errors/$error'
       path: '/errors/$error'
@@ -487,12 +507,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedSettingsRouteRouteChildren {
+  AuthenticatedSettingsAccountRoute: typeof AuthenticatedSettingsAccountRoute
   AuthenticatedSettingsAppearanceRoute: typeof AuthenticatedSettingsAppearanceRoute
   AuthenticatedSettingsIndexRoute: typeof AuthenticatedSettingsIndexRoute
 }
 
 const AuthenticatedSettingsRouteRouteChildren: AuthenticatedSettingsRouteRouteChildren =
   {
+    AuthenticatedSettingsAccountRoute: AuthenticatedSettingsAccountRoute,
     AuthenticatedSettingsAppearanceRoute: AuthenticatedSettingsAppearanceRoute,
     AuthenticatedSettingsIndexRoute: AuthenticatedSettingsIndexRoute,
   }

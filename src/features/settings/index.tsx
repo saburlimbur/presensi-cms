@@ -1,5 +1,5 @@
 import { Outlet } from '@tanstack/react-router'
-import { Palette, UserCog } from 'lucide-react'
+import { KeyRound, Palette, UserCog } from 'lucide-react'
 import { Separator } from '@/components/ui/separator'
 import { ConfigDrawer } from '@/components/config-drawer'
 import { Header } from '@/components/layout/header'
@@ -14,6 +14,11 @@ const sidebarNavItems = [
     title: 'Profile',
     href: '/settings',
     icon: <UserCog size={18} />,
+  },
+  {
+    title: 'Account',
+    href: '/settings/account',
+    icon: <KeyRound size={18} />,
   },
   {
     title: 'Appearance',
@@ -41,7 +46,7 @@ export function Settings() {
             Settings
           </h1>
           <p className='text-muted-foreground'>
-            Manage your profile and appearance preferences.
+            Manage your profile, account, and appearance preferences.
           </p>
         </div>
         <Separator className='my-4 lg:my-6' />

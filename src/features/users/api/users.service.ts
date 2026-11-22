@@ -14,6 +14,19 @@ export const usersService = {
     return res.data
   },
 
+  // Ganti password sendiri (PATCH /users/password, updatePasswordSchema).
+  // Backend mencabut semua refresh token user setelah berhasil.
+  updatePassword: async (payload: {
+    oldPassword: string
+    newPassword: string
+  }) => {
+    const res = await api.patch<{ success: boolean; message: string }>(
+      '/users/password',
+      payload
+    )
+    return res.data
+  },
+
   // Admin men-generate link reset password untuk karyawan. Backend TIDAK
   // menerima password baru di sini — ia mengembalikan token reset yang harus
   // diserahkan ke karyawan agar mereka mengatur password sendiri.
