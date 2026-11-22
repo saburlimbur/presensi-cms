@@ -31,6 +31,7 @@ import { Route as AuthenticatedSettingsAccountRouteImport } from './routes/_auth
 import { Route as AuthenticatedErrorsErrorRouteImport } from './routes/_authenticated/errors/$error'
 import { Route as AuthenticatedAttendancesShiftsRouteImport } from './routes/_authenticated/attendances/shifts'
 import { Route as AuthenticatedAttendancesReportsRouteImport } from './routes/_authenticated/attendances/reports'
+import { Route as AuthenticatedAttendancesRecordsRouteImport } from './routes/_authenticated/attendances/records'
 import { Route as AuthenticatedAttendancesLocationsRouteImport } from './routes/_authenticated/attendances/locations'
 import { Route as AuthenticatedRequestsPermissionsIndexRouteImport } from './routes/_authenticated/requests/permissions/index'
 
@@ -154,6 +155,12 @@ const AuthenticatedAttendancesReportsRoute =
     path: '/attendances/reports',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAttendancesRecordsRoute =
+  AuthenticatedAttendancesRecordsRouteImport.update({
+    id: '/attendances/records',
+    path: '/attendances/records',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedAttendancesLocationsRoute =
   AuthenticatedAttendancesLocationsRouteImport.update({
     id: '/attendances/locations',
@@ -182,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/leave-balances': typeof AuthenticatedLeaveBalancesRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/attendances/locations': typeof AuthenticatedAttendancesLocationsRoute
+  '/attendances/records': typeof AuthenticatedAttendancesRecordsRoute
   '/attendances/reports': typeof AuthenticatedAttendancesReportsRoute
   '/attendances/shifts': typeof AuthenticatedAttendancesShiftsRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
@@ -206,6 +214,7 @@ export interface FileRoutesByTo {
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/': typeof AuthenticatedIndexRoute
   '/attendances/locations': typeof AuthenticatedAttendancesLocationsRoute
+  '/attendances/records': typeof AuthenticatedAttendancesRecordsRoute
   '/attendances/reports': typeof AuthenticatedAttendancesReportsRoute
   '/attendances/shifts': typeof AuthenticatedAttendancesShiftsRoute
   '/errors/$error': typeof AuthenticatedErrorsErrorRoute
@@ -233,6 +242,7 @@ export interface FileRoutesById {
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
   '/_authenticated/attendances/locations': typeof AuthenticatedAttendancesLocationsRoute
+  '/_authenticated/attendances/records': typeof AuthenticatedAttendancesRecordsRoute
   '/_authenticated/attendances/reports': typeof AuthenticatedAttendancesReportsRoute
   '/_authenticated/attendances/shifts': typeof AuthenticatedAttendancesShiftsRoute
   '/_authenticated/errors/$error': typeof AuthenticatedErrorsErrorRoute
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/leave-balances'
     | '/notifications'
     | '/attendances/locations'
+    | '/attendances/records'
     | '/attendances/reports'
     | '/attendances/shifts'
     | '/errors/$error'
@@ -284,6 +295,7 @@ export interface FileRouteTypes {
     | '/notifications'
     | '/'
     | '/attendances/locations'
+    | '/attendances/records'
     | '/attendances/reports'
     | '/attendances/shifts'
     | '/errors/$error'
@@ -310,6 +322,7 @@ export interface FileRouteTypes {
     | '/_authenticated/notifications'
     | '/_authenticated/'
     | '/_authenticated/attendances/locations'
+    | '/_authenticated/attendances/records'
     | '/_authenticated/attendances/reports'
     | '/_authenticated/attendances/shifts'
     | '/_authenticated/errors/$error'
@@ -489,6 +502,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAttendancesReportsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/attendances/records': {
+      id: '/_authenticated/attendances/records'
+      path: '/attendances/records'
+      fullPath: '/attendances/records'
+      preLoaderRoute: typeof AuthenticatedAttendancesRecordsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/attendances/locations': {
       id: '/_authenticated/attendances/locations'
       path: '/attendances/locations'
@@ -531,6 +551,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
   AuthenticatedAttendancesLocationsRoute: typeof AuthenticatedAttendancesLocationsRoute
+  AuthenticatedAttendancesRecordsRoute: typeof AuthenticatedAttendancesRecordsRoute
   AuthenticatedAttendancesReportsRoute: typeof AuthenticatedAttendancesReportsRoute
   AuthenticatedAttendancesShiftsRoute: typeof AuthenticatedAttendancesShiftsRoute
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
@@ -547,6 +568,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
   AuthenticatedAttendancesLocationsRoute:
     AuthenticatedAttendancesLocationsRoute,
+  AuthenticatedAttendancesRecordsRoute: AuthenticatedAttendancesRecordsRoute,
   AuthenticatedAttendancesReportsRoute: AuthenticatedAttendancesReportsRoute,
   AuthenticatedAttendancesShiftsRoute: AuthenticatedAttendancesShiftsRoute,
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,

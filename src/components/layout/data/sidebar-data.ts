@@ -1,6 +1,7 @@
 import {
   Bell,
   Building2,
+  ClipboardList,
   Clock,
   FileBarChart,
   FileText,
@@ -51,6 +52,11 @@ export const sidebarData: SidebarData = {
     {
       title: 'Attendance',
       items: [
+        {
+          title: 'Records',
+          url: '/attendances/records',
+          icon: ClipboardList,
+        },
         {
           title: 'Reports',
           url: '/attendances/reports',
