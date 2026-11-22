@@ -62,6 +62,8 @@ export const permissionSchema = z.object({
   reason: z.string().nullable().optional(),
   startDate: z.coerce.date(),
   endDate: z.coerce.date(),
+  // jumlah hari izin, dihitung backend saat request dibuat
+  duration: z.number().int().optional(),
   // key storage, bukan url — jangan dipakai buat href
   attachmentUrl: z.string().nullable().optional(),
   // signed url dari server, ini yang dipakai

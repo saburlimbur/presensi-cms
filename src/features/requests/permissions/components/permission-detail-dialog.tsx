@@ -1,10 +1,12 @@
 'use client'
 
 import { format } from 'date-fns'
+import { useQuery } from '@tanstack/react-query'
 import {
   Calendar,
   FileText,
-  Mail,
+  Hourglass,
+  Wallet,
   User as UserIcon,
   type LucideIcon,
 } from 'lucide-react'
@@ -18,6 +20,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import { leaveBalancesService } from '@/features/leave-balances/api/leave-balances.service'
 import { type Permission } from '../data/schema'
 import {
   PERMISSION_TYPE_LABEL,
@@ -38,6 +41,24 @@ export function PermissionDetailDialog({
 }: PermissionDetailDialogProps) {
   const { setOpen } = usePermissions()
   const data = currentRow
+
+  // Sisa cuti karyawan untuk tahun izin ini (GET /leave-balances/by-user/:userId)
+  const userId = data.user?.id ?? data.userId
+  const leaveYear = new Date(data.startDate).getFullYear()
+  const balanceQuery = useQuery({
+    queryKey: ['leave-balances', 'by-user', userId],
+    queryFn: () => leaveBalancesService.getByUser(userId as string),
+    enabled: open && !!userId,
+    staleTime: 60_000,
+  })
+  const balance = balanceQuery.data?.find((b) => b.year === leaveYear)
+  const balanceLabel = balanceQuery.isLoading
+    ? 'Memuat...'
+    : balanceQuery.isError
+      ? 'Gagal memuat'
+      : balance
+        ? `${balance.remainingDays} dari ${balance.annualQuota + balance.carryOverDays} hari (${leaveYear})`
+        : `Belum ada saldo ${leaveYear}`
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -92,10 +113,11 @@ export function PermissionDetailDialog({
               value={format(data.createdAt, 'dd MMM yyyy HH:mm')}
             />
             <InfoRow
-              icon={Mail}
-              label='Email'
-              value={data.user?.email ?? '-'}
+              icon={Hourglass}
+              label='Duration'
+              value={data.duration != null ? `${data.duration} hari` : '-'}
             />
+            <InfoRow icon={Wallet} label='Sisa Cuti' value={balanceLabel} />
           </div>
 
           <div>
@@ -143,6 +165,11 @@ export function PermissionDetailDialog({
               <div className='text-sm font-medium'>
                 {data.approver.fullName}
               </div>
+              {data.approvedAt ? (
+                <div className='text-xs text-muted-foreground'>
+                  {format(data.approvedAt, 'dd MMM yyyy HH:mm')}
+                </div>
+              ) : null}
             </div>
           ) : null}
         </div>

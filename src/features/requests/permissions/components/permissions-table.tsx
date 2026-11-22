@@ -28,8 +28,10 @@ export function PermissionsTable({ data }: { data: Permission[] }) {
             <TableHead className='pl-4'>Employee</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Period</TableHead>
+            <TableHead>Duration</TableHead>
             <TableHead>Reason</TableHead>
             <TableHead>Attachment</TableHead>
+            <TableHead>Requested</TableHead>
             <TableHead>Status</TableHead>
             <TableHead className='pr-4 text-right'>Action</TableHead>
           </TableRow>
@@ -37,7 +39,7 @@ export function PermissionsTable({ data }: { data: Permission[] }) {
         <TableBody>
           {data.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className='h-24 text-center'>
+              <TableCell colSpan={9} className='h-24 text-center'>
                 No permission requests.
               </TableCell>
             </TableRow>
@@ -62,6 +64,9 @@ export function PermissionsTable({ data }: { data: Permission[] }) {
                   {format(row.startDate, 'dd MMM')} →{' '}
                   {format(row.endDate, 'dd MMM yyyy')}
                 </TableCell>
+                <TableCell className='text-xs whitespace-nowrap'>
+                  {row.duration != null ? `${row.duration} hari` : '-'}
+                </TableCell>
                 <TableCell className='max-w-[220px] text-xs text-muted-foreground'>
                   <span className='line-clamp-1'>{row.reason}</span>
                 </TableCell>
@@ -83,6 +88,9 @@ export function PermissionsTable({ data }: { data: Permission[] }) {
                       None
                     </span>
                   )}
+                </TableCell>
+                <TableCell className='text-xs whitespace-nowrap text-muted-foreground'>
+                  {format(row.createdAt, 'dd MMM yyyy')}
                 </TableCell>
                 <TableCell>
                   <PermissionStatusBadge status={row.status} />
