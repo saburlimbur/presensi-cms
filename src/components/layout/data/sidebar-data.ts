@@ -8,7 +8,6 @@ import {
   MapPin,
   ScrollText,
   Settings,
-  Timer,
   Users,
   Wallet,
   Command,
@@ -76,11 +75,6 @@ export const sidebarData: SidebarData = {
           title: 'Permissions',
           url: '/requests/permissions',
           icon: FileText,
-        },
-        {
-          title: 'Overtime',
-          url: '/requests/overtime',
-          icon: Timer,
         },
         {
           title: 'Leave Balances',
