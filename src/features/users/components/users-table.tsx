@@ -40,7 +40,6 @@ type DataTableProps = {
 export function UsersTable({ data, search, navigate }: DataTableProps) {
   const { setOpen } = useUsers()
   const { data: departments } = useGetAllDepartments()
-  console.log('departments', departments)
   const departmentOptions = useMemo(() => {
     if (!departments) return []
     return departments.map((dept: { id: string; name: string }) => ({
@@ -134,41 +133,41 @@ export function UsersTable({ data, search, navigate }: DataTableProps) {
           table={table}
           searchPlaceholder='Filter employees by name'
           searchKey='fullName'
-        filters={[
-          {
-            columnId: 'isActive',
-            title: 'Status',
-            options: [
-              {
-                label: 'Active',
-                value: 'active',
-              },
-              {
-                label: 'Inactive',
-                value: 'inactive',
-              },
-            ],
-          },
-          {
-            columnId: 'role',
-            title: 'Role',
-            options: roles.map((role) => ({ ...role })),
-          },
-          {
-            columnId: 'department',
-            title: 'Department',
-            options: departmentOptions,
-          },
-          // {
-          //   columnId: 'position',
-          //   title: 'Position',
-          //   options: positions.map((p) => ({
-          //     label: p.label,
-          //     value: p.value,
-          //   })),
-          // },
-        ]}
-      />
+          filters={[
+            {
+              columnId: 'isActive',
+              title: 'Status',
+              options: [
+                {
+                  label: 'Active',
+                  value: 'active',
+                },
+                {
+                  label: 'Inactive',
+                  value: 'inactive',
+                },
+              ],
+            },
+            {
+              columnId: 'role',
+              title: 'Role',
+              options: roles.map((role) => ({ ...role })),
+            },
+            {
+              columnId: 'department',
+              title: 'Department',
+              options: departmentOptions,
+            },
+            // {
+            //   columnId: 'position',
+            //   title: 'Position',
+            //   options: positions.map((p) => ({
+            //     label: p.label,
+            //     value: p.value,
+            //   })),
+            // },
+          ]}
+        />
         <Button size='sm' className='h-8' onClick={() => setOpen('add')}>
           <Plus className='size-4' />
           Add Employee

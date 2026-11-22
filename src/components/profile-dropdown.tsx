@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import useDialogState from '@/hooks/use-dialog-state'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -10,33 +9,18 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { SignOutDialog } from '@/components/sign-out-dialog'
-import { usersService } from '@/features/users/api/users.service'
-import { User } from '@/features/users/data/schema'
+import { useGetProfile } from '@/features/users/hooks/use-get-profile'
 
 export function ProfileDropdown() {
   const [open, setOpen] = useDialogState()
-  const [userData, setUserData] = useState<User | null>(null)
+  const { profile } = useGetProfile()
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const data = await usersService.getProfile()
-        setUserData(data)
-      } catch (error) {
-        console.error('Gagal mengambil profil:', error)
-      }
-    }
-    fetchProfile()
-  }, [])
-
-  // Jika data belum ada, tampilkan loading atau fallback
-  const displayName = userData?.fullName || 'Loading...'
-  const displayEmail = userData?.email || '...'
-  const initials = userData?.fullName
+  const displayName = profile?.fullName || 'Loading...'
+  const displayEmail = profile?.email || '...'
+  const initials = profile?.fullName
     ?.split(' ')
     .map((name: string) => name[0])
     .join('')
@@ -49,7 +33,10 @@ export function ProfileDropdown() {
         <DropdownMenuTrigger asChild>
           <Button variant='ghost' className='relative h-8 w-8 rounded-full'>
             <Avatar className='h-8 w-8'>
-              <AvatarImage src='/avatars/01.png' alt={displayName} />
+              <AvatarImage
+                src={profile?.profilePhoto_url ?? ''}
+                alt={displayName}
+              />
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
           </Button>
@@ -66,31 +53,15 @@ export function ProfileDropdown() {
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
             <DropdownMenuItem asChild>
-              <Link to='/settings'>
-                Profile
-                <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-              </Link>
+              <Link to='/settings'>Profile</Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link to='/settings'>
-                Billing
-                <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-              </Link>
+              <Link to='/settings/appearance'>Appearance</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <Link to='/settings'>
-                Settings
-                <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>New Team</DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuItem variant='destructive' onClick={() => setOpen(true)}>
             Sign out
-            <DropdownMenuShortcut className='text-current'>
-              ⇧⌘Q
-            </DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

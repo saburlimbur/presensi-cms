@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { format } from 'date-fns'
 import { Plus } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -8,8 +10,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
   Table,
@@ -75,11 +75,7 @@ export function EmployeeRecordsDialog({
         </DialogHeader>
 
         {open && userId && (
-          <RecordsList
-            userId={userId}
-            dateFrom={dateFrom}
-            dateTo={dateTo}
-          />
+          <RecordsList userId={userId} dateFrom={dateFrom} dateTo={dateTo} />
         )}
 
         {userId && (
@@ -144,7 +140,7 @@ function RecordsList({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {records.map((rec: any) => (
+            {records.map((rec) => (
               <TableRow key={rec.id}>
                 <TableCell className='text-xs'>
                   {fmt(rec.date, 'dd MMM yyyy')}

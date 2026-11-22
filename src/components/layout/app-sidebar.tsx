@@ -17,7 +17,6 @@ export function AppSidebar() {
   const { collapsible, variant } = useLayout()
   const { profile } = useGetProfile()
 
-  console.log('profile:', profile)
   const initials = profile?.fullName
     ? profile.fullName
         .split(' ')
@@ -27,12 +26,11 @@ export function AppSidebar() {
         .toUpperCase()
     : '??'
 
-  // 2. Bungkus data user
   const userData = {
     name: profile?.fullName || 'Loading...',
     email: profile?.email || '...',
-    avatar: '',
-    initials: initials,
+    avatar: profile?.profilePhoto_url ?? '',
+    initials,
   }
 
   return (

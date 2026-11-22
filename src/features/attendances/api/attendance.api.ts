@@ -16,11 +16,57 @@ export type ManualAttendancePayload = {
   note?: string
 }
 
+export type Attendance = {
+  id: string
+  userId: string
+  date: string
+  checkIn: string | null
+  checkOut: string | null
+  status: string
+  method: string
+  workMode: 'WFO' | 'WFA'
+  shiftName: string | null
+  note: string | null
+  latitudeIn: number | null
+  longitudeIn: number | null
+  latitudeOut: number | null
+  longitudeOut: number | null
+  isLocationValid: boolean | null
+  deviceInfo: string | null
+  user: {
+    id: string
+    fullName: string
+    email: string
+    employeeId: string
+    position: string
+    department: { id: string; name: string; code: string } | null
+  }
+}
+
+export type AttendanceListParams = {
+  page?: number
+  limit?: number
+  status?: string
+  workMode?: string
+  userId?: string
+  departmentId?: string
+  date?: string
+  dateFrom?: string
+  dateTo?: string
+  shiftName?: string
+}
+
 export const attendancesApi = {
-  getAllUserAttendance: async (params?: Record<string, any>) => {
-    const response = await ApiService.get('/attendance/list-user-attendances', {
-      params,
-    })
+  getAllUserAttendance: async (params?: AttendanceListParams) => {
+    const response = await ApiService.get<{
+      data: Attendance[]
+      pagination?: {
+        total: number
+        page: number
+        limit: number
+        totalPages: number
+      }
+    }>('/attendance/list-user-attendances', { params })
     return response.data
   },
 
@@ -29,7 +75,7 @@ export const attendancesApi = {
     return response.data
   },
 
-  getAllUserAttendanceToExcel: async (params?: Record<string, any>) => {
+  getAllUserAttendanceToExcel: async (params?: AttendanceListParams) => {
     const response = await ApiService.get(
       '/attendance/list-user-attendances/export',
       {
@@ -53,10 +99,7 @@ export const attendancesApi = {
   },
 
   createManual: async (payload: ManualAttendancePayload) => {
-    const response = await ApiService.post(
-      '/attendance/create-manual',
-      payload
-    )
+    const response = await ApiService.post('/attendance/create-manual', payload)
     return response.data
   },
 }

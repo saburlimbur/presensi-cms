@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from '@tanstack/react-router'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { sleep, cn } from '@/lib/utils'
+import ApiService from '@/lib/axios'
+import { getErrorMessage } from '@/lib/handle-server-error'
+import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -27,7 +28,6 @@ export function ForgotPasswordForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLFormElement>) {
-  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,18 +37,18 @@ export function ForgotPasswordForm({
 
   function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
 
-    toast.promise(sleep(2000), {
+    toast.promise(ApiService.post('/users/password/forgot', data), {
       loading: 'Sending email...',
       success: () => {
         setIsLoading(false)
         form.reset()
-        navigate({ to: '/otp' })
-        return `Email sent to ${data.email}`
+        return `If ${data.email} is registered, a reset link has been sent.`
       },
-      error: 'Error',
+      error: (err) => {
+        setIsLoading(false)
+        return getErrorMessage(err, 'Failed to send reset email.')
+      },
     })
   }
 

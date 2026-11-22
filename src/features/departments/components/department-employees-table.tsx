@@ -152,13 +152,13 @@ export function DepartmentEmployeesTable({
   const [sorting, setSorting] = useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = useState('')
 
-  const isAll = selectedDepartmentId === 'all'
-
   const { data: employeesData, isLoading } = useQuery({
     queryKey: ['department-employees', selectedDepartmentId],
     queryFn: () =>
       employeeService.getAll(
-        isAll ? {} : { departmentId: selectedDepartmentId }
+        selectedDepartmentId === 'all'
+          ? {}
+          : { departmentId: selectedDepartmentId }
       ),
     enabled: !!selectedDepartmentId && employeeCount > 0,
     staleTime: 1000 * 60 * 5,

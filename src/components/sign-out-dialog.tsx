@@ -1,5 +1,8 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useLocation } from '@tanstack/react-router'
 import { useAuthStore } from '@/stores/auth-store'
+import ApiService from '@/lib/axios'
+import { getCookie } from '@/lib/cookies'
 import { ConfirmDialog } from '@/components/confirm-dialog'
 
 interface SignOutDialogProps {
@@ -11,9 +14,16 @@ export function SignOutDialog({ open, onOpenChange }: SignOutDialogProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const { auth } = useAuthStore()
+  const queryClient = useQueryClient()
 
-  const handleSignOut = () => {
+  const handleSignOut = async () => {
+    // cabut refresh token di server; kalau gagal, sesi lokal tetap dibersihkan
+    await ApiService.post('/users/logout', {
+      refreshToken: getCookie(import.meta.env.VITE_REFRESH_TOKEN_KEY),
+    }).catch(() => undefined)
+
     auth.reset()
+    queryClient.clear()
     // Preserve current location for redirect after sign-in
     const currentPath = location.href
     navigate({

@@ -11,7 +11,7 @@ export type DepartmentPayload = {
 export const departmentsService = {
   getAll: async (params?: Record<string, unknown>): Promise<Department[]> => {
     const response = await ApiService.get('/departments', {
-      params,
+      params: { limit: 100, ...params },
     })
     return (response.data?.data ?? []) as Department[]
   },

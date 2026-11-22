@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/handle-server-error'
 import { locationsService } from '../api/location.api'
 
 export default function useDeleteLocation() {
@@ -11,12 +12,7 @@ export default function useDeleteLocation() {
       toast.success('Location deleted successfully')
       queryClient.invalidateQueries({ queryKey: ['locations'] })
     },
-    onError: (err: any) => {
-      const msg =
-        err?.response?.data?.message ??
-        err?.message ??
-        'Failed to delete location'
-      toast.error(msg)
-    },
+    onError: (err) =>
+      toast.error(getErrorMessage(err, 'Failed to delete location')),
   })
 }

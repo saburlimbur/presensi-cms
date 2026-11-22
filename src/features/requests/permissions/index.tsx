@@ -45,12 +45,13 @@ function Permissions() {
     [status, type]
   )
 
-  const { permissions, isLoading, isFetching, refetch } = useGetPermissions(params)
+  const { permissions, isLoading, isFetching, refetch } =
+    useGetPermissions(params)
 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
     if (!q) return permissions
-    return permissions.filter((p: any) => {
+    return permissions.filter((p) => {
       const name = p.user?.fullName?.toLowerCase() ?? ''
       const empId = p.user?.employeeId?.toLowerCase() ?? ''
       return name.includes(q) || empId.includes(q)

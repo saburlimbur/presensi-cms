@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/handle-server-error'
 import { departmentsService } from '../api/departments.service'
 
 export default function useDeleteDepartment() {
@@ -11,12 +12,7 @@ export default function useDeleteDepartment() {
       toast.success('Department deleted successfully')
       queryClient.invalidateQueries({ queryKey: ['departments'] })
     },
-    onError: (err: any) => {
-      const msg =
-        err?.response?.data?.message ??
-        err?.message ??
-        'Failed to delete department'
-      toast.error(msg)
-    },
+    onError: (err) =>
+      toast.error(getErrorMessage(err, 'Failed to delete department')),
   })
 }

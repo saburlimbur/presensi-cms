@@ -16,7 +16,9 @@ export const leaveBalancesService = {
   getAll: async (
     params?: Record<string, unknown>
   ): Promise<{ data: LeaveBalance[]; pagination?: Pagination }> => {
-    const res = await ApiService.get('/leave-balances', { params })
+    const res = await ApiService.get('/leave-balances', {
+      params: { limit: 100, ...params },
+    })
     return res.data as { data: LeaveBalance[]; pagination?: Pagination }
   },
 

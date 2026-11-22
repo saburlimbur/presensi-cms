@@ -16,6 +16,7 @@ import {
   Timer,
   Users,
   XCircle,
+  type LucideIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -127,7 +128,7 @@ function Reports() {
 
   const recap = (activeQuery.data as AttendanceRecapResponse | undefined)?.data
   const summary = recap?.summary
-  const details = recap?.details ?? []
+  const details = recap?.details
 
   // ---- Date range untuk export Excel ----
   const exportRange = useMemo(() => {
@@ -159,8 +160,8 @@ function Reports() {
   // ---- Filtered details (client-side search by name/empId) ----
   const filteredDetails = useMemo(() => {
     const q = search.trim().toLowerCase()
-    if (!q) return details
-    return details.filter(
+    if (!q) return details ?? []
+    return (details ?? []).filter(
       (d) =>
         d.fullName.toLowerCase().includes(q) ||
         d.employeeId.toLowerCase().includes(q)
@@ -173,7 +174,10 @@ function Reports() {
   const safePage = Math.min(page, totalPages)
   const pageRows = useMemo(
     () =>
-      filteredDetails.slice((safePage - 1) * limit, (safePage - 1) * limit + limit),
+      filteredDetails.slice(
+        (safePage - 1) * limit,
+        (safePage - 1) * limit + limit
+      ),
     [filteredDetails, safePage, limit]
   )
 
@@ -584,7 +588,7 @@ function StatCard({
   label: string
   value: number | undefined
   isLoading?: boolean
-  icon: any
+  icon: LucideIcon
   tone: Tone
 }) {
   return (

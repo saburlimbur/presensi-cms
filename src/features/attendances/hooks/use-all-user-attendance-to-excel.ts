@@ -1,10 +1,13 @@
 import { format } from 'date-fns'
 import { useMutation } from '@tanstack/react-query'
-import { attendancesApi } from '../api/attendance.api'
+import {
+  attendancesApi,
+  type AttendanceListParams,
+} from '../api/attendance.api'
 
 export function useAllUserAttendanceToExcel() {
   return useMutation({
-    mutationFn: async (params?: Record<string, any>) => {
+    mutationFn: async (params?: AttendanceListParams) => {
       const blob = await attendancesApi.getAllUserAttendanceToExcel(params)
       const url = window.URL.createObjectURL(blob)
       const link = document.createElement('a')

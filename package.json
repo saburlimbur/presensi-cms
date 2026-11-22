@@ -1,7 +1,7 @@
 {
-  "name": "shadcn-admin",
-  "private": false,
-  "version": "2.2.1",
+  "name": "absensi-cms",
+  "private": true,
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,6 @@
     "knip": "knip"
   },
   "dependencies": {
-    "@clerk/clerk-react": "^5.61.3",
     "@hookform/resolvers": "^5.2.2",
     "@microsoft/fetch-event-source": "^2.0.1",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -43,11 +42,8 @@
     "clsx": "^2.1.1",
     "cmdk": "1.1.1",
     "date-fns": "^4.1.0",
-    "input-otp": "^1.4.2",
     "lucide-react": "^1.7.0",
     "maplibre-gl": "^5.22.0",
-    "nodemailer": "^9.0.1",
-    "radix-ui": "^1.4.3",
     "react": "^19.2.4",
     "react-day-picker": "9.14.0",
     "react-dom": "^19.2.4",
@@ -64,7 +60,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "@faker-js/faker": "^10.4.0",
     "@tanstack/eslint-plugin-query": "^5.95.2",
     "@tanstack/react-query-devtools": "^5.95.2",
     "@tanstack/react-router-devtools": "^1.166.11",

@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { type Attendance } from '@/features/attendances/api/attendance.api'
 import { useAllUserAttendance } from '@/features/attendances/hooks/use-all-user-attendance'
 
 const formatDuration = (minutes: number) => {
@@ -22,14 +23,15 @@ const formatTime = (date: string) =>
     minute: '2-digit',
   })
 
-const SessionRow = ({ session }: { session: any }) => {
+type Session = Attendance & { checkIn: string }
+
+const SessionRow = ({ session }: { session: Session }) => {
   const lastActivity = new Date(session.checkOut ?? session.checkIn)
   const durationMinutes = differenceInMinutes(
     session.checkOut ? new Date(session.checkOut) : new Date(),
     new Date(session.checkIn)
   )
-  const initials =
-    session.user?.fullName?.substring(0, 2).toUpperCase() || '??'
+  const initials = session.user?.fullName?.substring(0, 2).toUpperCase() || '??'
 
   return (
     <li className='group flex items-center gap-3 rounded-md px-2 py-3 transition-colors hover:bg-muted/40'>
@@ -54,21 +56,19 @@ const SessionRow = ({ session }: { session: any }) => {
       </div>
 
       <div className='shrink-0 text-right'>
-        <div className='font-mono text-base font-semibold tabular-nums leading-none text-foreground'>
+        <div className='font-mono text-base leading-none font-semibold text-foreground tabular-nums'>
           <span>{session.checkIn ? formatTime(session.checkIn) : '—'}</span>
           <span className='mx-1.5 text-muted-foreground/40'>→</span>
           <span
             className={cn(
-              session.checkOut
-                ? 'text-foreground'
-                : 'text-muted-foreground/50'
+              session.checkOut ? 'text-foreground' : 'text-muted-foreground/50'
             )}
           >
             {session.checkOut ? formatTime(session.checkOut) : '—'}
           </span>
         </div>
         <div className='mt-1.5 flex items-center justify-end gap-1.5 text-[11px]'>
-          <span className='font-medium tabular-nums text-foreground'>
+          <span className='font-medium text-foreground tabular-nums'>
             {formatDuration(durationMinutes)}
           </span>
           <span className='text-muted-foreground/40'>·</span>
@@ -104,7 +104,7 @@ const SectionHeader = ({
         {label}
       </span>
     </div>
-    <span className='font-mono text-xs font-medium tabular-nums text-muted-foreground'>
+    <span className='font-mono text-xs font-medium text-muted-foreground tabular-nums'>
       {count}
     </span>
   </div>
@@ -115,19 +115,20 @@ export function RecentAttendance() {
     useAllUserAttendance()
 
   const sessions = (allUserAttendance?.data ?? [])
-    .filter((att: any) => {
-      const inToday = att.checkIn && isToday(new Date(att.checkIn))
-      const outToday = att.checkOut && isToday(new Date(att.checkOut))
-      return inToday || outToday
-    })
-    .sort((a: any, b: any) => {
+    .filter(
+      (att): att is Session =>
+        !!att.checkIn &&
+        (isToday(new Date(att.checkIn)) ||
+          (!!att.checkOut && isToday(new Date(att.checkOut))))
+    )
+    .sort((a, b) => {
       const aTime = new Date(a.checkOut ?? a.checkIn).getTime()
       const bTime = new Date(b.checkOut ?? b.checkIn).getTime()
       return bTime - aTime
     })
 
-  const activeSessions = sessions.filter((s: any) => !s.checkOut)
-  const completedSessions = sessions.filter((s: any) => s.checkOut)
+  const activeSessions = sessions.filter((s) => !s.checkOut)
+  const completedSessions = sessions.filter((s) => s.checkOut)
 
   if (isLoadingAttendance) {
     return (
@@ -193,7 +194,7 @@ export function RecentAttendance() {
             variant='active'
           />
           <ul className='divide-y divide-border/40'>
-            {activeSessions.map((session: any) => (
+            {activeSessions.map((session) => (
               <SessionRow key={session.id} session={session} />
             ))}
           </ul>
@@ -208,7 +209,7 @@ export function RecentAttendance() {
             variant='completed'
           />
           <ul className='divide-y divide-border/40'>
-            {completedSessions.map((session: any) => (
+            {completedSessions.map((session) => (
               <SessionRow key={session.id} session={session} />
             ))}
           </ul>

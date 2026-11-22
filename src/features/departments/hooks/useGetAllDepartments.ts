@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { departmentsService } from '../api/departments.service'
 
-export default function useGetAllDepartments(params?: any) {
+export default function useGetAllDepartments(params?: Record<string, unknown>) {
   const { data, isLoading } = useQuery({
     queryKey: ['departments', params],
 

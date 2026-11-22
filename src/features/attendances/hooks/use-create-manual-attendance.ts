@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/handle-server-error'
 import {
   attendancesApi,
   type ManualAttendancePayload,
@@ -16,13 +17,8 @@ export function useCreateManualAttendance() {
       queryClient.invalidateQueries({ queryKey: ['attendanceRecords'] })
       queryClient.invalidateQueries({ queryKey: ['allUserAttendance'] })
     },
-    onError: (err: any) => {
-      const msg =
-        err?.response?.data?.message ??
-        err?.message ??
-        'Gagal membuat absensi manual'
-      toast.error(msg)
-    },
+    onError: (err) =>
+      toast.error(getErrorMessage(err, 'Gagal membuat absensi manual')),
   })
 }
 

@@ -10,9 +10,9 @@ import { type Permission } from '../data/schema'
 type PermissionEnvelope = { data: Permission | null }
 
 export const permissionsService = {
-  getAll: async (_params?: Record<string, unknown>) => {
+  getAll: async (params?: Record<string, unknown>) => {
     const res = await ApiService.get('/permissions', {
-      params: _params,
+      params: { limit: 100, ...params },
     })
     return res.data as Permission
   },

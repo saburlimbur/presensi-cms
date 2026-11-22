@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { getErrorMessage } from '@/lib/handle-server-error'
 import { permissionsService } from '../api/permissions.service'
 
 export default function useApprovePermission() {
@@ -12,10 +13,6 @@ export default function useApprovePermission() {
       toast.success('Permission approved')
       queryClient.invalidateQueries({ queryKey: ['permissions'] })
     },
-    onError: (err: any) => {
-      const msg =
-        err?.response?.data?.message ?? err?.message ?? 'Failed to approve'
-      toast.error(msg)
-    },
+    onError: (err) => toast.error(getErrorMessage(err, 'Failed to approve')),
   })
 }

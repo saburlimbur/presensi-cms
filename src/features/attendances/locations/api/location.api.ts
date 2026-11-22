@@ -3,7 +3,9 @@ import { type Location, type LocationFormValues } from '../data/schema'
 
 export const locationsService = {
   getAll: async (params?: Record<string, unknown>): Promise<Location[]> => {
-    const res = await ApiService.get('/locations', { params })
+    const res = await ApiService.get('/locations', {
+      params: { limit: 100, ...params },
+    })
     return (res.data?.data ?? []) as Location[]
   },
 

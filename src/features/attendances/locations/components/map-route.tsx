@@ -18,12 +18,6 @@ import {
   MarkerLabel,
 } from '@/components/ui/map'
 
-const OFFICE_LOCATION = {
-  name: 'Kantor Pusat',
-  lat: -6.443895384361175,
-  lng: 106.85811961021825,
-}
-
 const satelliteStyle = {
   version: 8 as const,
   sources: {
@@ -57,6 +51,7 @@ interface RouteData {
 interface MapRouteDistanceProps {
   lat: number
   lng: number
+  office: { name: string; latitude: number; longitude: number }
   userName?: string
   checkIn?: string | null
   checkOut?: string | null
@@ -89,6 +84,7 @@ function formatTime(dateStr: string): string {
 export function MapRouteDistance({
   lat,
   lng,
+  office,
   userName,
   checkIn,
   checkOut,
@@ -110,32 +106,37 @@ export function MapRouteDistance({
       setHasError(false)
       try {
         const response = await fetch(
-          `https://router.project-osrm.org/route/v1/driving/${lng},${lat};${OFFICE_LOCATION.lng},${OFFICE_LOCATION.lat}?overview=full&geometries=geojson&alternatives=true&radiuses=unlimited;unlimited`
+          `https://router.project-osrm.org/route/v1/driving/${lng},${lat};${office.longitude},${office.latitude}?overview=full&geometries=geojson&alternatives=true&radiuses=unlimited;unlimited`
         )
         const data = await response.json()
 
         if (data.routes?.length > 0) {
-          const routeData: RouteData[] = data.routes.map((route: any) => {
-            const osrmCoords = route.geometry.coordinates
-            const seamlessCoords: [number, number][] = [
-              [lng, lat],
-              ...osrmCoords,
-              [OFFICE_LOCATION.lng, OFFICE_LOCATION.lat],
-            ]
+          const routeData: RouteData[] = data.routes.map(
+            (route: {
+              geometry: { coordinates: [number, number][] }
+              duration: number
+              distance: number
+            }) => {
+              const osrmCoords = route.geometry.coordinates
+              const seamlessCoords: [number, number][] = [
+                [lng, lat],
+                ...osrmCoords,
+                [office.longitude, office.latitude],
+              ]
 
-            return {
-              coordinates: seamlessCoords,
-              duration: route.duration,
-              distance: route.distance,
+              return {
+                coordinates: seamlessCoords,
+                duration: route.duration,
+                distance: route.distance,
+              }
             }
-          })
+          )
           setRoutes(routeData)
           setSelectedIndex(0)
         } else {
           setHasError(true)
         }
-      } catch (error) {
-        console.error('Failed to fetch routes:', error)
+      } catch {
         setHasError(true)
       } finally {
         setIsLoading(false)
@@ -145,7 +146,7 @@ export function MapRouteDistance({
     if (lat && lng) {
       fetchRoutes()
     }
-  }, [lat, lng])
+  }, [lat, lng, office.latitude, office.longitude])
 
   const selectedRoute = routes[selectedIndex]
 
@@ -175,10 +176,7 @@ export function MapRouteDistance({
           })}
 
         {/* office marker */}
-        <MapMarker
-          longitude={OFFICE_LOCATION.lng}
-          latitude={OFFICE_LOCATION.lat}
-        >
+        <MapMarker longitude={office.longitude} latitude={office.latitude}>
           <MarkerContent>
             <div className='relative flex items-center justify-center'>
               <div className='absolute size-8 animate-ping rounded-full bg-red-400 opacity-20' />
@@ -188,7 +186,7 @@ export function MapRouteDistance({
               position='top'
               className='rounded bg-black/60 px-2 py-0.5 font-bold text-white shadow'
             >
-              {OFFICE_LOCATION.name}
+              {office.name}
             </MarkerLabel>
           </MarkerContent>
         </MapMarker>
@@ -259,7 +257,7 @@ export function MapRouteDistance({
                   )}
                 </div>
                 <p className='mt-0.5 text-[11px] text-slate-500 dark:text-slate-400'>
-                  Rute ke {OFFICE_LOCATION.name}
+                  Rute ke {office.name}
                 </p>
               </div>
             </div>
