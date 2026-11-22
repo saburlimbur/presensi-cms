@@ -95,7 +95,7 @@ function LocationsMapPlaceholder({
 }
 
 function Locations() {
-  const { allUserAttendance, isLoading } = useAllUserAttendance()
+  const { allUserAttendance, isLoading } = useAllUserAttendance(100)
   const { locations } = useGetLocations()
   const attendanceData = (allUserAttendance?.data ?? []).filter(
     (item) => item.checkIn && !item.checkOut

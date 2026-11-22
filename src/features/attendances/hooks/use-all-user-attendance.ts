@@ -1,20 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
 import { attendancesApi } from '../api/attendance.api'
 
-export function useAllUserAttendance() {
+// limit default 5 untuk daftar "recent" di dashboard. Live tracking butuh
+// semua sesi yang masih berjalan, jadi memanggil dengan limit 100 (batas
+// server) supaya karyawan di luar 5 record terbaru tidak hilang dari peta.
+export function useAllUserAttendance(limit = 5) {
+  const params = { page: 1, limit }
   const { data, isLoading, isFetching } = useQuery({
-    queryKey: [
-      'allUserAttendance',
-      {
-        page: 1,
-        limit: 5,
-      },
-    ],
+    queryKey: ['allUserAttendance', params],
     queryFn: async () => {
-      return await attendancesApi.getAllUserAttendance({
-        page: 1,
-        limit: 5,
-      })
+      return await attendancesApi.getAllUserAttendance(params)
     },
 
     // Update realtime diandalkan ke SSE (attendance:checked_in/out meng-invalidate
